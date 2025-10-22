@@ -23,7 +23,7 @@ Operating System: 5.13
 4. **Select "Custom repositories"**
 5. **Add this repository:**
    - Repository: `https://github.com/juangarcia0482/home-assistance`
-   - Type: `Dashboard`
+   - Type: `Theme`
    - Click "Add"
 6. **Download the configuration:**
    - Search for "Home Assistant Configuration - LAJV"
