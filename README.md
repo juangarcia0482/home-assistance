@@ -163,9 +163,16 @@ After installation, you **must** customize these:
 
 1. **Copy essential files** from `www/community/home-assistance/` to your main config folder (see commands above)
 2. **Install frontend cards** - Go to HACS → Frontend and install the 6 cards listed above  
-3. **Edit `secrets.yaml`** with your real credentials  
-4. **Update IP addresses** in `configuration.yaml`
-5. **Replace light entity names** with your actual entities
+3. **Set up integrations via UI** (Settings → Devices & Services):
+   - **Philips Hue** - Add integration, it will auto-discover your bridge
+   - **Spotify** - Add integration if you use Spotify features
+   - **Buienradar** - Add integration for Dutch weather and rain forecasts
+   - **Radarr** - Add integration for movie management (if using Radarr server)
+   - **MQTT** - Add integration if you have an MQTT broker
+   - **Xiaomi Miio** - Add integration for vacuum control
+4. **Edit `secrets.yaml`** with your real credentials  
+5. **Update IP addresses** in `configuration.yaml`
+6. **Replace light entity names** with your actual entities
 
 > ⚠️ **Important**: This configuration requires customization for your specific setup. The original config has specific light entities and IP addresses that need to be replaced with your own.
 

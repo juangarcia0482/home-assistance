@@ -124,11 +124,9 @@ lovelace:
     url: /local/js/nightscout-card.js?v=0.0.31
 
 
-hue:
-  bridges:
-    - host: 192.168.0.210
-      allow_unreachable: true
-      
+# Hue integration is now configured via UI (Settings → Devices & Services)
+# The old YAML configuration has been removed as it's no longer supported
+
 mqtt:
   broker: 192.168.0.248
   port: 1883
@@ -146,11 +144,8 @@ mqtt:
 #   client_id: !secret google_client_id
 #   client_secret: !secret google_secret
 
-## Spotify
-spotify:
-    client_id: !secret spotify_client_id
-    client_secret: !secret spotify_secret
-    
+# Spotify integration is now configured via UI (Settings → Devices & Services)
+# The old YAML configuration has been removed as it's no longer supported
  
 spotcast:
   sp_dc: !secret sp_dc
@@ -211,14 +206,8 @@ device_tracker:
       - 192.168.178.227
     home_interval: 4
 
-## Weather
-weather:
-  - platform: buienradar
-    name: 'buienWeather'
-    latitude: !secret latitude
-    longitude: !secret longitude
-    forecast: true
-    
+# Buienradar weather integration is now configured via UI (Settings → Devices & Services)
+# The old YAML weather platform configuration has been removed as it's no longer supported
 
 input_number:
   nightime:
@@ -284,9 +273,8 @@ binary_sensor:
 
 sensor:
 
-
-  - platform: radarr
-    api_key: !secret radarr_token 
+# Radarr integration is now configured via UI (Settings → Devices & Services)
+# The old YAML sensor platform configuration has been removed as it's no longer supported
 
   - platform: plex_recently_added
     name: Recently Added Movies # will create sensor.recently_added_movies
@@ -314,36 +302,10 @@ sensor:
       - 'time_date'
       - 'time_utc'
       - 'beat'
-  - platform: buienradar
-    name: 'buienradar'
-    latitude: 52.365150
-    longitude: 4.934230
-    timeframe: 120
-    monitored_conditions:
-      - stationname
-      - barometerfc
-      - barometerfcname
-      - conditioncode
-      - condition
-      - conditiondetailed
-      - conditionexact
-      - conditionexact_1d
-      - symbol
-      - feeltemperature
-      - temperature
-      - groundtemperature
-      - windspeed
-      - windforce
-      - windgust
-      - rain_1d
-      - windspeed_1d
-      - rainchance_1d
-      - precipitation
-      - irradiance
-      - precipitation_forecast_average
-      - precipitation_forecast_total
-      - rainlast24hour
-      - rainlasthour
+
+# Buienradar sensor integration is now configured via UI (Settings → Devices & Services)
+# The old YAML sensor platform configuration has been removed as it's no longer supported
+# Weather data will be available through the UI-configured integration
 
   - platform: darksky
     api_key: !secret dark_sky_key
