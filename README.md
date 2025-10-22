@@ -8,19 +8,63 @@ Operating System: 5.13
 
 ## 🚀 Installation
 
-> **� [SIMPLE INSTALL GUIDE](SIMPLE_INSTALL.md)** - Download & copy files (easiest!)  
-> **⚡ [5-Minute Quick Start](QUICK_START.md)** - For beginners  
-> **📖 [Complete Guide](ADD_TO_HOMEASSISTANT.md)** - Detailed walkthrough
+> **📖 [Complete HACS Installation Guide](HACS_INSTALLATION.md)** - Step-by-step HACS method  
+> **⚡ [5-Minute Quick Start](QUICK_START.md)** - For beginners
 
-⚠️ **HACS Installation Not Recommended** - Use direct download instead
+### **Method 1: HACS Installation (Recommended)**
+1. **Go to HACS** in your Home Assistant
+2. **Click on "Integrations"**
+3. **Click the three dots** (⋮) in the top right corner
+4. **Select "Custom repositories"**
+5. **Add this repository:**
+   - Repository: `https://github.com/juangarcia0482/home-assistance`
+   - Category: `Integration`
+   - Click "Add"
+6. **Download the configuration:**
+   - Search for "Home Assistant Configuration - LAJV"
+   - Click "Download this repository with HACS"
+7. **Copy essential files** (see below)
+8. **Install required frontend cards** from HACS → Frontend
 
-### **Quick Steps:**
+### **Method 2: Direct Download (Alternative)**
 1. **[Download ZIP](https://github.com/juangarcia0482/home-assistance/archive/refs/heads/main.zip)** from this repository
-2. **Extract** and **copy files** to your Home Assistant `/config/` folder  
-3. **Install frontend cards** from HACS → Frontend
-4. **Edit settings** and **restart**
+2. **Extract** and **copy essential files** to your Home Assistant main config folder
 
-**→ [Follow the Simple Install Guide](SIMPLE_INSTALL.md)** for detailed steps
+### **Required Frontend Components**
+Install these through **HACS → Frontend**:
+- Button Card
+- Card Mod  
+- Config Template Card
+- Bar Card
+- Mini Graph Card
+- Mini Media Player
+
+## ✨ Essential Files to Copy
+
+After downloading via HACS or ZIP, you only need to copy these **4 core files**:
+
+```
+📁 From HACS download location (www/community/home-assistance/) or ZIP
+│
+├── 📄 ui-lovelace.yaml          → Copy to /homeassistant/
+├── 📄 configuration.yaml       → Merge with your existing /homeassistant/configuration.yaml  
+├── 📄 secrets_template.yaml    → Copy as secrets.yaml to /homeassistant/
+└── 📁 www/                     → Copy entire folder to /homeassistant/www/
+```
+
+> ⚠️ **Important**: Don't copy ALL files - just these 4 items contain everything needed for the 3D dashboard!
+
+## ⚠️ **Important Configuration Steps**
+
+> **Note**: Your main config folder might be `/config/` or `/homeassistant/` depending on your installation
+
+After installation, you **must** edit these:
+
+1. **Copy files** from `www/community/home-assistance/` to your main config folder
+2. **Edit `secrets.yaml`** with your real credentials  
+3. **Update IP addresses** in `configuration.yaml`
+4. **Replace light entity names** with your actual entities
+5. **Install frontend cards** listed above
 
 ### Manual Installation
 ```bash
