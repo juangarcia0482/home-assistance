@@ -23,7 +23,7 @@ Operating System: 5.13
 4. **Select "Custom repositories"**
 5. **Add this repository:**
    - Repository: `https://github.com/juangarcia0482/home-assistance`
-   - Category: `Integration` (⚠️ **Important**: Choose "Integration", not "Lovelace")
+   - Category: `Integration`
    - Category: `Integration`
    - Click "Add"
 6. **Download the configuration:**
@@ -110,19 +110,6 @@ After downloading via HACS or ZIP, you need to copy these **essential files**:
 ```
 
 ### **🔄 Quick Copy Commands**
-
-**Option A: Batch Copy (Recommended)**
-Run this single command in your Home Assistant SSH terminal:
-```bash
-# Copy all essential files at once
-cp -r www/community/home-assistance/www/{js,people,robot,ui,upcoming-media-card-images} www/ && \
-cp www/community/home-assistance/www/transparent.png www/ && \
-cp www/community/home-assistance/{ui-lovelace.yaml,ui-lovelace_mobile.yaml,button_card_templates.yaml,groups.yaml,automations.yaml,scripts.yaml,scenes.yaml,customize.yaml,themes.yaml,homekit.yaml} /homeassistant/ && \
-cp www/community/home-assistance/deployment/templates/secrets_template.yaml /homeassistant/secrets.yaml
-```
-
-**Option B: Individual Commands**
-If batch fails, run these commands **one by one**:
 ```bash
 # Clean up any previous failed attempts
 rm -rf www/www
