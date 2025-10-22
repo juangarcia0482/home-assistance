@@ -1,0 +1,545 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+#customize: !include customize.yaml
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+browser_mod:
+  devices:
+    8fbe9ff3-9e1ed0d0:
+      name: mac_chrome
+    e98effc3-b940ce40:
+      name: tablet
+
+
+##############################################      
+################ UI Libraries ################ 
+##############################################
+
+# I chose to not just use HACS, as some libraries are custom 
+# (for styling) and I prefer manual control.
+
+
+frontend:
+  themes: !include themes.yaml
+  
+homekit: !include homekit.yaml
+lovelace:
+  mode: yaml
+  dashboards:
+    lovelace-mobile: 
+      mode: yaml
+      filename: ui-lovelace_mobile.yaml
+      title: Mobile
+      icon: mdi:cellphone
+      show_in_sidebar: true
+  
+  resources:
+  
+    ################
+    ##### LOCAL ####
+    ################
+    
+  - type: module
+    url: /local/js/custom-header.js?v=1.8.3
+  - type: module
+    url: /local/js/button-entity-row.js
+  - type: module
+    url: /local/js/now-playing-card.js
+
+    #######################
+    ##### HACS CUSTOM #####
+    #######################
+    
+  - url: /hacsfiles/light-popup-card/light-popup-card.js
+    type: module
+  - url: /hacsfiles/Homekit-panel-card/homekit-panel-card.js
+    type: module   
+    
+    ########################
+    ##### HACS DEFAULT #####
+    ########################
+    
+  - url: /hacsfiles/lovelace-card-mod/card-mod.js
+    type: module
+  - url: /hacsfiles/popup-backdrop-filter/popup-backdrop-filter.js
+    type: module    
+  - url: /hacsfiles/text-element/text-element.js
+    type: module    
+  - url: /hacsfiles/config-template-card/config-template-card.js
+    type: module    
+  - url: /hacsfiles/bar-card/bar-card.js
+    type: module
+  - url: /hacsfiles/circle-sensor-card/circle-sensor-card.js
+    type: module    
+  - url: /hacsfiles/lovelace-layout-card/layout-card.js
+    type: module    
+  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+    type: module    
+  - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
+    type: module    
+  - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+    type: module   
+  - url: /hacsfiles/upcoming-media-card/upcoming-media-card.js
+    type: module    
+  - url: /hacsfiles/simple-weather-card/simple-weather-card-bundle.js
+    type: module    
+  - url: /hacsfiles/weather-card/weather-card.js
+    type: module    
+  - url: /hacsfiles/button-card/button-card.js
+    type: module   
+  - url: /hacsfiles/spotify-card/spotify-card.js
+    type: module
+  - url: /hacsfiles/light-entity-card/light-entity-card.js   
+    type: module
+  - url: /hacsfiles/lovelace-hui-element/hui-element.js   
+    type: module   
+  - url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js  
+    type: module      
+    
+    ###################################################
+    ##### CARDS I CREATED OR MODIFIED FOR STYLING #####
+    ###################################################
+    # I cannot support any issues with these, they are 
+    # completely custom. I cant confirm that CSS styles 
+    # will look right in any other browser than my own.
+    
+  - type: module
+    url: /local/js/buien-rain-card.js?v=0.0.60
+  - type: js
+    url: /local/js/light-slider-card-lajv.js
+  - type: js
+    url: /local/js/nightscout-card.js?v=0.0.31
+
+
+# Hue integration is now configured via UI (Settings → Devices & Services)
+# The old YAML configuration has been removed as it's no longer supported
+
+mqtt:
+  broker: 192.168.0.248
+  port: 1883
+  username: !secret mqtt_user_name
+  password: !secret mqtt_password
+  discovery: true
+
+  
+#################################################################
+## Components
+#################################################################
+
+
+# google:
+#   client_id: !secret google_client_id
+#   client_secret: !secret google_secret
+
+# Spotify integration is now configured via UI (Settings → Devices & Services)
+# The old YAML configuration has been removed as it's no longer supported
+ 
+spotcast:
+  sp_dc: !secret sp_dc
+  sp_key: !secret sp_key
+  accounts:
+    santa:
+      sp_dc: !secret sp_dc_santa
+      sp_key: !secret sp_key_santa 
+
+counter:
+  people_on_roof:
+    initial: 0
+    step: 1
+    
+
+      
+## For robot vacuum & automation status
+
+camera:
+  - platform: xiaomi_cloud_map_extractor
+    host: !secret xiaomi_vacuum_host
+    token: !secret xiaomi_vacuum_token
+    username: !secret xiaomi_cloud_username
+    password: !secret xiaomi_cloud_password
+    draw: ['all']
+    map_transformation:
+      trim:
+        top: 15
+        bottom: 15
+        left: 0
+        right: 0
+    attributes:
+      - calibration_points  
+
+input_text:
+  room_cleaning:
+    name: Currently Cleaning Room
+    initial: charging
+
+## Basic Presence
+device_tracker:
+  - platform: bluetooth_tracker
+    track_new_devices: true
+    interval_seconds: 5
+    consider_home: 30
+#   - platform: upc_connect 
+#     password: !secret wifi_admin_password
+#     track_new_devices: false
+#     host: 192.168.178.1
+#     interval_seconds: 3
+#     consider_home: 30
+  - platform: nmap_tracker
+    hosts: 
+      - 192.168.0.233
+      - 192.168.0.204
+      - 192.168.0.241      
+      - 192.168.178.136
+      - 192.168.178.227
+    home_interval: 4
+
+# Buienradar weather integration is now configured via UI (Settings → Devices & Services)
+# The old YAML weather platform configuration has been removed as it's no longer supported
+
+input_number:
+  nightime:
+    name: Nightime value
+    initial: 0
+    min: 0
+    max: 1
+    step: 1
+    mode: box
+
+  range_high:
+    name: High Limit
+    initial: 8.0
+    min: 0
+    max: 30
+
+  range_low:
+    name: High Limit
+    initial: 4.0
+    min: 0
+    max: 30
+
+
+## For IR Blaster / Speaker remote control through homekit
+
+switch:
+  - platform: broadlink
+    mac: '78:0F:77:18:54:CB'
+    switches:
+      - name: Speakers
+        command_on: 'JgBYAAABJ5UVEBUREhQUERUREhMVERI4FRAVEhEUFBEVNRI4FTUWEBITFRESExURFBISExU1FDYSOBQ2FDYSOBQ1FjUSExUREQAFpgABKkgSAAxVAAEnSxUADQU='
+        command_off: 'JgBYAAABKJMTExQRFRIRFBITExMTEhQ2ExMVEBUSERQTNxU1EjgTEhI4EjgVNRI4EzcWDxMTFTUWEBITFBISFBITEzcSOBUQFQAFogABKkgSAAxWAAEnSxUADQU='
+      - name: Speakers Up
+        command_on: 'JgBQAAABJ5UTEhQSEhQUERMTEhMVERI4EhMVERIUFBETNxI4EzcUEhE4FTUVNRIUExITExM3EzcSFBMSFhASOBM2FjURFBMSEgAFpgABKkgSAA0FAAAAAAAAAAA='
+        command_off: 'JgBQAAABJ5UTEhQSEhQUERMTEhMVERI4EhMVERIUFBETNxI4EzcUEhE4FTUVNRIUExITExM3EzcSFBMSFhASOBM2FjURFBMSEgAFpgABKkgSAA0FAAAAAAAAAAA='
+      - name: Speakers Down
+        command_on: 'JgBYAAABK5EUEhUQFhASFRQQFREUExM1FBIVEBYRERQVNBY1EzcVEBURExQTERU1FRAVERQ2FTUVNRQ2FTUVERM2FjQVERQTEwAFowABJ0sVAAxUAAEpSRMADQU==='
+        command_off: 'JgBYAAABK5EUEhUQFhASFRQQFREUExM1FBIVEBYRERQVNBY1EzcVEBURExQTERU1FRAVERQ2FTUVNRQ2FTUVERM2FjQVERQTEwAFowABJ0sVAAxUAAEpSRMADQU==='
+      - name: Projector Audio
+        command_on: 'JgBYAAABJ5UUERMTFRAVERIUFBETExI4FRATExURFBESOBU1FTUSFBMSFTUSFBM3EhQSExQ2EzcSOBQREzgSExM3EjgTEhMUEAAFpwABKEoTAAxVAAEnSxUADQU==='
+        command_off: 'JgBYAAABKpEVERIUFBETExUQFRIRFBQ2FBIRFBQRExMVNRU1EjgVEBUREjgVNRU1EhQUERU2ETgVNRUREhMVERI4EzcUERMTFAAFpAABKkgSAAxWAAEnSxMADQU==='
+                    
+
+#################################################################
+## Sensors
+#################################################################
+
+
+binary_sensor:
+
+  - platform: template
+    sensors:
+      roof_door_open:
+        friendly_name: "Roof Door Open"
+        device_class: door
+        value_template: "{{ states('sensor.roof_door_ypos')|int > 30 }}"
+        
+    
+  - platform: tod
+    name: Night
+    after: sunset
+    before: sunrise
+
+sensor:
+
+# Radarr integration is now configured via UI (Settings → Devices & Services)
+# The old YAML sensor platform configuration has been removed as it's no longer supported
+
+  - platform: plex_recently_added
+    name: Recently Added Movies # will create sensor.recently_added_movies
+    token: !secret plex_token
+    host: 192.168.0.245
+    port: 32400
+    section_types:
+    - movie
+
+  - platform: plex_recently_added
+    name: Recently Added TV  # will create sensor.recently_added_tv
+    token: !secret plex_token
+    host: 192.168.0.245
+    port: 32400
+    section_types:
+    - show
+
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_utc'
+      - 'date_time_iso'
+      - 'time_date'
+      - 'time_utc'
+      - 'beat'
+
+# Buienradar sensor integration is now configured via UI (Settings → Devices & Services)
+# The old YAML sensor platform configuration has been removed as it's no longer supported
+# Weather data will be available through the UI-configured integration
+
+  - platform: darksky
+    api_key: !secret dark_sky_key
+    latitude: 52.365150
+    longitude: 4.934230
+    forecast:
+      - 0
+    hourly_forecast:
+      - 0
+    monitored_conditions:
+      - summary
+      - icon
+      - temperature
+      - cloud_cover
+      - dew_point
+      - uv_index
+      - moon_phase
+      - alerts
+
+#   - platform: rest
+#     name: luke_cgm
+#     resource: https://lajv-ichor.herokuapp.com/api/v1/entries/current.json
+#     value_template: >
+#       sgv:{{value_json[0].sgv}}, trend:{{value_json[0].trend}}, direction:{{value_json[0].direction}}, time:{{ ( (as_timestamp(now()) - as_timestamp(value_json[0].dateString) ) / 60) | round(0) }}
+
+#   - platform: rest
+#     name: luke_treatments
+#     resource: https://lajv-ichor.herokuapp.com/api/v1/treatments.json
+#     value_template: >
+#       carbs:{{value_json[0].carbs}}, eventType:{{value_json[0].eventType}}, insulin:{{value_json[0].insulin}}, time:{{ (as_timestamp(value_json[0].created_at)) }}
+
+
+#######################################################################################
+## Templates (Used for updating text in the UI and converting sensors to CSS values )
+#######################################################################################
+
+  - platform: template
+    sensors:
+
+      roof_door_ypos:
+        value_template: >-
+          {{ state_attr('sensor.roof_door_action','angle_y_absolute') | int }}
+        unit_of_measurement: "°"
+        friendly_name: "Roof Door Y Angle"
+        icon_template: >-
+          {% if state_attr('sensor.roof_door_action','angle_y_absolute') | int < 40 %}
+            mdi:door-closed
+          {% else %}
+            mdi:door-open
+          {% endif %}
+ 
+     #   luke_cgm_sgv:
+    #     value_template: >
+    #       {{ states('sensor.luke_cgm') | regex_findall_index("sgv:(\d+)") }}
+    #     unit_of_measurement: "mmol"
+    # #   luke_cgm_trend:
+    # #     value_template: >
+    # #       {{ states('sensor.luke_cgm') | regex_findall_index("trend:(\d+)") }}
+    #   luke_cgm_direction:
+    #     value_template: >
+    #       {{ states('sensor.luke_cgm') | regex_findall_index("direction:(\w+)") }}
+    #   luke_cgm_time:
+    #     value_template: >
+    #       {{ states('sensor.luke_cgm') | regex_findall_index("time:(\d+)") }}
+    #   luke_cgm_sgv_mmol:
+    #     value_template: >
+    #       {%- set mgdl = states('sensor.luke_cgm_sgv') | float %}
+    #       {%- set mmol = (mgdl / 18) %}
+    #       {{ mmol | float | round(1)}}
+    #     unit_of_measurement: "mmol/L"
+    #     device_class: temperature
+    #     friendly_name: "Sugar Level"
+    #     icon_template: >-
+    #       {%- set mgdl = states('sensor.luke_cgm_sgv') | float %}
+    #       {%- set mmol = (mgdl / 18) %}
+    #       {% if mmol < 4 %}
+    #         mdi:arrow-up-bold
+    #       {% else %}
+    #         {% if mmol > 8 %}
+    #           mdi:arrow-up-bold
+    #         {% else %}
+    #           mdi:water
+    #         {% endif %}
+    #       {% endif %}        
+         
+    #   luke_inslulin:
+    #     value_template: >
+    #       {{ states('sensor.luke_treatments') | regex_findall_index("insulin:(\d+)") }}
+    #     unit_of_measurement: "units"
+
+    #   luke_carbs:
+    #     value_template: >
+    #       {{ states('sensor.luke_treatments') | regex_findall_index("carbs:(\d+)") }}
+    #     unit_of_measurement: "g"
+
+      ## to get the current view of my tablet for UI automations
+      tablet_view:
+           value_template: "{{ states.sensor.tablet.attributes['path'] | default('/lovelace/0') }}"
+           friendly_name: Tablet View
+
+
+      ## Calculates daylight brightness out of 100%
+      sunlight_pct:
+        value_template: >-
+          {%- set elevation = state_attr('sun.sun','elevation') | float %}
+          {%- set cloud_coverage = states('sensor.dark_sky_cloud_coverage') | float %}
+          {%- set cloud_factor = (1 - (0.75 * ( cloud_coverage / 100) ** 3 )) %}
+          {%- set min_elevation = -6 %}
+          {%- set max_elevation = 90 %}
+          {%- set adjusted_elevation = elevation - min_elevation %}
+          {%- set adjusted_elevation = [adjusted_elevation,0] | max %}
+          {%- set adjusted_elevation = [adjusted_elevation,max_elevation - min_elevation] | min %}
+          {%- set adjusted_elevation = adjusted_elevation / (max_elevation - min_elevation) %}
+          {%- set adjusted_elevation = adjusted_elevation %}
+          {%- set adjusted_elevation = adjusted_elevation * 100 %}
+          {%- set brightness = adjusted_elevation * cloud_factor %}
+          {{ brightness | round }}
+        unit_of_measurement: '%'
+        device_class: 'illuminance'
+
+
+      ## Daylight brightness converted to opacity for CSS
+      sunlight_opacity:
+        value_template: >-
+          {%- set sunpct = states('sensor.sunlight_pct') | float %}
+          {%- set opacity = sunpct / 100 | float %}
+          {{ opacity }}
+
+
+      ## Converts time and date into sentence for UI
+      day:
+        value_template: >
+          {% set days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+          {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+          {{ days[now().weekday()] }}
+
+      month:
+        value_template: >
+          {% set months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+          {{ strptime(states('sensor.date'), '%Y-%m-%d').day }}
+          {{ months[now().month-1] }}
+
+      date_string:
+        friendly_name: "Full Date"
+        value_template: "{{ states('sensor.day') }}, {{ states('sensor.month') }} {{ now().year }}"
+
+
+      ## Vaccuum templates, for showing attributes as sensors, etc.
+
+      vacuum_status:
+        friendly_name: "Vacuum - Status"
+        value_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.status }}"
+
+      vacuum_cleaning_status:
+        friendly_name: "Vacuum - Cleaning Status"
+        value_template: "Cleaning {{ states('input_text.room_cleaning') }}"
+
+      vacuum_battery:
+        friendly_name: "Vacuum - Battery"
+        value_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_level }}"
+        device_class: battery
+        unit_of_measurement: '%'
+
+      vacuum_fan:
+        friendly_name: "Vacuum - Fan Speed"
+        value_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.fan_speed }}"
+
+      vacuum_battery_icon:
+        friendly_name: "Vacuum - Battery Icon"
+        icon_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_icon }}"
+        value_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_icon }}"
+
+      vacuum_cleaning_time:
+        friendly_name: "Vacuum - Cleaning Time"
+        value_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaning_time }}"
+
+      vacuum_cleaned_area:
+        friendly_name: "Vacuum - Cleaned Area"
+        value_template: "{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaned_area }}"
+
+
+
+#################################################################
+## Light Groups
+#################################################################
+
+
+light:
+ - platform: group
+   name: Kitchen Lights
+   entities:
+    - light.kitchen_1
+    - light.kitchen_2
+    - light.kitchen_3
+    - light.kitchen_4
+
+ - platform: group
+   name: Roof Lights
+   entities:
+     - light.roof_garden
+     - light.roof_plants
+
+ - platform: group
+   name: Kitchen Fridge Lights
+   entities:
+     - light.kitchen_1
+     - light.kitchen_2
+ - platform: group
+   name: Kitchen Sink Lights
+   entities:
+     - light.kitchen_3
+     - light.kitchen_4
+
+ - platform: group
+   name: Living Room Lights
+   entities:
+     - light.couch
+     - light.table
+     - light.cabinet
+
+ - platform: group
+   name: Toilet Lights
+   entities:
+     - light.toilet_1
+     - light.toilet_2
+
+ - platform: group
+   name: Bedroom Lights
+   entities:
+     - light.bedroom_roof
+     - light.bed
+
+ - platform: group
+   name: Stairs Lights
+   entities:
+     - light.stairs_2
+     - light.door

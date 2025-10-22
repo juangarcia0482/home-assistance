@@ -30,11 +30,13 @@ Operating System: 5.13
 4. **Select "Custom repositories"**
 5. **Add this repository:**
    - Repository: `https://github.com/juangarcia0482/home-assistance`
-   - Type: **Leave empty/blank** (don't select any category)
+   - Type: **Dashboard**
    - Click "Add"
 6. **Download the configuration:**
-   - The repository will be added as a custom repository
-   - All files will download uncompressed to `/www/community/home-assistance/`
+   - Search for "Home Assistant Configuration - LAJV" in Dashboard section
+   - Click "Download this repository with HACS"
+   - All files will download **uncompressed** to `/www/community/home-assistance/`
+   - HACS will download from the `dist/` directory (all files included)
 
 > **📁 After download, you should see:**
 > - `/www/community/home-assistance/` folder with all configuration files
