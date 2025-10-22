@@ -12,11 +12,32 @@ Before installing this configuration, ensure you have:
 
 ### Method 1: HACS Installation (Recommended)
 
-1. Open HACS in your Home Assistant interface
-2. Go to "Integrations"
-3. Click the "+" button
-4. Search for "Home Assistant Configuration - LAJV" or add this repository URL
-5. Download and restart Home Assistant
+#### Step 1: Add Custom Repository
+1. **Open Home Assistant** and navigate to **HACS**
+2. **Click on "Integrations"**
+3. **Click the three dots** (⋮) in the top right corner
+4. **Select "Custom repositories"**
+5. **Add this repository:**
+   - Repository URL: `https://github.com/juangarcia0482/home-assistance`
+   - Category: `Integration`
+   - Click **"Add"**
+
+#### Step 2: Download Configuration
+1. **Go back to HACS Integrations**
+2. **Click "+ Explore & Download repositories"**
+3. **Search for "Home Assistant Configuration - LAJV"**
+4. **Click "Download this repository with HACS"**
+5. **Home Assistant Configuration is now added to your HA setup**
+
+#### Step 3: Run Setup Script
+1. **Navigate to your Home Assistant config directory**
+2. **Run the setup script:**
+   - **Windows**: `.\deployment\scripts\setup.ps1`
+   - **Linux/macOS**: `./deployment/scripts/setup.sh`
+3. **Follow the prompts to complete initial setup**
+
+#### Step 4: Restart Home Assistant
+- Restart Home Assistant to apply the new configuration
 
 ### Method 2: Manual Installation
 

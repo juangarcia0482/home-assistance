@@ -9,11 +9,21 @@ Operating System: 5.13
 ## 🚀 Quick Installation
 
 ### HACS Installation (Recommended)
-1. Ensure you have [HACS](https://hacs.xyz/) installed
-2. Add this repository to HACS as a custom repository
-3. Download and install
-4. Run the setup script: `.\deployment\scripts\setup.ps1` (Windows) or `./deployment/scripts/setup.sh` (Linux/macOS)
-5. Follow the [detailed installation guide](deployment/docs/INSTALLATION.md)
+1. **Go to HACS** in your Home Assistant
+2. **Click on "Integrations"**
+3. **Click the three dots** (⋮) in the top right corner
+4. **Select "Custom repositories"**
+5. **Add this repository:**
+   - Repository: `https://github.com/juangarcia0482/home-assistance`
+   - Category: `Integration`
+   - Click "Add"
+6. **Download the configuration:**
+   - Search for "Home Assistant Configuration - LAJV"
+   - Click "Download this repository with HACS"
+7. **Run setup script:** `.\deployment\scripts\setup.ps1` (Windows) or `./deployment/scripts/setup.sh` (Linux/macOS)
+8. **Follow the [detailed installation guide](deployment/docs/INSTALLATION.md)**
+
+📋 **[Complete HACS Installation Guide](HACS_INSTALLATION.md)** - Step-by-step with screenshots
 
 ### Manual Installation
 ```bash
