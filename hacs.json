@@ -3,5 +3,7 @@
   "content_in_root": true,
   "render_readme": true,
   "homeassistant": "2021.5.0",
-  "filename": "home-assistance.js"
+  "filename": "home-assistance.js",
+  "zip_release": false,
+  "hide_default_branch": false
 }
