@@ -8,24 +8,30 @@ Operating System: 5.13
 
 ## 🚀 Quick Installation
 
-> **📖 [Complete Step-by-Step Guide: How to Add This to Home Assistant](ADD_TO_HOMEASSISTANT.md)**
+> ⚠️ **Note**: HACS installation has limitations for complete configurations. See [Installation Issue](INSTALLATION_ISSUE.md)
 
-### HACS Installation (Recommended)
-1. **Go to HACS** in your Home Assistant
-2. **Click on "Integrations"**
-3. **Click the three dots** (⋮) in the top right corner
-4. **Select "Custom repositories"**
-5. **Add this repository:**
-   - Repository: `https://github.com/juangarcia0482/home-assistance`
-   - Category: `Integration`
-   - Click "Add"
-6. **Download the configuration:**
-   - Search for "Home Assistant Configuration - LAJV"
-   - Click "Download this repository with HACS"
-7. **Run setup script:** `.\deployment\scripts\setup.ps1` (Windows) or `./deployment/scripts/setup.sh` (Linux/macOS)
-8. **Follow the [detailed installation guide](deployment/docs/INSTALLATION.md)**
+### **Method 1: Direct Download (Recommended)**
+1. **Download ZIP**: Click **"Code" → "Download ZIP"** from this repository
+2. **Extract files** to your computer
+3. **Backup your current Home Assistant configuration**
+4. **Copy all files** to your Home Assistant `/config/` folder
+5. **Run setup script**: `./deployment/scripts/setup.sh` or manually edit `secrets.yaml`
+6. **Restart Home Assistant**
 
-📋 **[Complete HACS Installation Guide](HACS_INSTALLATION.md)** - Step-by-step with screenshots
+### **Method 2: Git Clone (Advanced)**
+```bash
+cd /config
+git clone https://github.com/juangarcia0482/home-assistance.git temp
+cp -r temp/* .
+rm -rf temp
+```
+
+### ~~Method 3: HACS Installation~~ (Has Issues)
+~~HACS downloads to wrong location for complete configurations.~~  
+**If you used HACS**: Copy files from `/config/www/community/home-assistance/` to `/config/`
+
+> **⚡ [SUPER SIMPLE 5-Minute Guide](QUICK_START.md)** - For beginners  
+> **📖 [Complete Step-by-Step Guide](ADD_TO_HOMEASSISTANT.md)** - Detailed walkthrough
 
 ### Manual Installation
 ```bash

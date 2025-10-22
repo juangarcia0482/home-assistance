@@ -34,58 +34,102 @@ Follow these exact steps to install this Home Assistant configuration through HA
    - Click "**Download this repository with HACS**"
    - Confirm the download
 
-### 3️⃣ Initial Setup
+### 3️⃣ Initial Setup (Easy Way)
 
-1. **Navigate to Config Directory**:
-   - SSH into your Home Assistant or use File Editor
-   - Go to your `/config` directory
+After HACS downloads the repository, you need to set up a few files:
 
-2. **Run Setup Script**:
+#### **Option A: Using Home Assistant File Editor (Easiest)**
+
+1. **Install File Editor Add-on** (if you don't have it):
+   - Go to **Settings** → **Add-ons** → **Add-on Store**
+   - Search for "**File editor**" and install it
+   - Start the File editor add-on
+
+2. **Open File Editor**:
+   - Go to **Settings** → **Add-ons** → **File editor** → **Open Web UI**
+
+3. **Create your secrets file**:
+   - In File Editor, navigate to the main folder
+   - Find the folder `deployment/templates/`
+   - **Right-click** on `secrets_template.yaml`
+   - Select **"Copy"**
+   - **Right-click** in the main folder (where configuration.yaml is)
+   - Select **"Paste"**
+   - **Rename** the copied file from `secrets_template.yaml` to `secrets.yaml`
+
+4. **Edit the secrets.yaml file**:
+   - **Double-click** on `secrets.yaml` to open it
+   - **Replace the example values** with your real information:
+     ```yaml
+     # Change these to your real values:
+     mqtt_user_name: "your_actual_mqtt_username"
+     mqtt_password: "your_actual_mqtt_password"
+     spotify_client_id: "your_real_spotify_id"
+     spotify_client_secret: "your_real_spotify_secret"
+     ```
+   - **Save** the file (Ctrl+S)
+
+#### **Option B: Using Terminal Add-on** (For advanced users)
+
+1. **Install Terminal & SSH add-on** (if you don't have it)
+2. **Open Terminal** and run these commands:
    ```bash
-   # For Home Assistant OS/Container:
    cd /config
-   chmod +x deployment/scripts/setup.sh
-   ./deployment/scripts/setup.sh
-   
-   # Or manually create secrets.yaml:
    cp deployment/templates/secrets_template.yaml secrets.yaml
    ```
 
-3. **Edit Configuration Files**:
-   - **Required**: Edit `secrets.yaml` with your actual credentials
-   - **Required**: Update IP addresses in `configuration.yaml`
-   - **Required**: Replace light entity names with your own
+#### **Important: Update Your Configuration**
+
+You **MUST** change these settings or the configuration won't work:
+
+1. **Edit `configuration.yaml`**:
+   - Find this line: `host: 192.168.0.210` (Hue bridge)
+   - **Change it** to your Hue bridge IP address
+   - Find this line: `broker: 192.168.0.248` (MQTT)
+   - **Change it** to your MQTT broker IP address
+
+2. **Replace light names** throughout the configuration:
+   - Find all mentions of `light.table`, `light.living_room`, etc.
+   - **Replace them** with your actual light entity names
+   - **Tip**: Go to **Developer Tools** → **States** to see your light names
 
 ### 4️⃣ Install Required Frontend Components
 
-Install these through **HACS → Frontend**:
+**You need to install these cards through HACS, or the dashboard won't work:**
 
-- ✅ **Button Card** 
-- ✅ **Card Mod**
-- ✅ **Config Template Card**
-- ✅ **Bar Card**
-- ✅ **Mini Graph Card**
-- ✅ **Mini Media Player**
-- ✅ **Simple Weather Card**
-- ✅ **Light Entity Card**
-- ✅ **Xiaomi Vacuum Map Card**
-- ✅ **Spotify Card**
-- ✅ **Upcoming Media Card**
-- ✅ **Light Popup Card**
-- ✅ **HomeKit Panel Card**
+1. **Go to HACS** → **Frontend** (not Integrations this time!)
+2. **For each card below**, click "**Explore & Download repositories**" and search for it:
+
+**Essential Cards** (install all of these):
+- ✅ **Button Card** - Search: "button-card"
+- ✅ **Card Mod** - Search: "lovelace-card-mod" 
+- ✅ **Config Template Card** - Search: "config-template-card"
+- ✅ **Bar Card** - Search: "bar-card"
+- ✅ **Mini Graph Card** - Search: "mini-graph-card"
+- ✅ **Mini Media Player** - Search: "mini-media-player"
+- ✅ **Simple Weather Card** - Search: "simple-weather-card"
+- ✅ **Light Entity Card** - Search: "light-entity-card"
+
+**Optional Cards** (only if you have the hardware):
+- **Xiaomi Vacuum Map Card** - (only if you have Xiaomi robot)
+- **Spotify Card** - (only if you use Spotify)
+- **Upcoming Media Card** - (only if you use Plex)
+- **Light Popup Card** - Search: "light-popup-card"
+- **HomeKit Panel Card** - Search: "homekit-panel-card"
 
 ### 5️⃣ Final Steps
 
-1. **Check Configuration**:
-   - Developer Tools → Check Configuration
-   - Fix any entity errors
+1. **Check your configuration**:
+   - Go to **Developer Tools** → **Check Configuration**
+   - **Fix any red errors** that appear
 
 2. **Restart Home Assistant**:
-   - Configuration → Server Controls → Restart
+   - Go to **Settings** → **System** → **Restart**
+   - Wait for Home Assistant to come back online
 
-3. **Verify Installation**:
-   - Check that the new Lovelace dashboard loads
-   - Test the 3D floorplan functionality
+3. **Check if it worked**:
+   - Your dashboard should now show the 3D floorplan
+   - If you see errors, check the troubleshooting section below
 
 ## 🆘 Troubleshooting
 
