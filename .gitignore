@@ -1,0 +1,53 @@
+
+# Home Assistant specific files
+secrets.yaml
+known_devices.yaml
+*.log
+*.db
+*.db-shm
+*.db-wal
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Custom component cache (keep the components but ignore cache)
+custom_components/**/__pycache__/
+custom_components/**/*.pyc
+
+# Home Assistant database and logs
+home-assistant_v2.db*
+home-assistant.log*
+
+# HACS downloaded files (these should be managed by HACS)
+# www/community/
+# custom_components/hacs/
+
+# Local development
+.pytest_cache/
+.coverage
+.tox/
+venv/
+env/
