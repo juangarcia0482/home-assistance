@@ -1,10 +1,5 @@
 {
   "name": "Home Assistant Configuration - LAJV",
-  "content_in_root": true,
-  "zip_release": true,
-  "filename": "hacs.json",
-  "country": ["NL", "US", "EU"],
-  "homeassistant": "2021.5.0",
   "render_readme": true,
-  "hide_default_branch": false
+  "homeassistant": "2021.5.0"
 }

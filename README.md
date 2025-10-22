@@ -6,32 +6,21 @@ Operating System: 5.13
 
 [Hass.io](https://home-assistant.io/) installed on a [Raspberry Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) and running on a wall mounted tablet (lenovo M10) displaying Home Assistant [Fully Kiosk Browser](https://www.fully-kiosk.com/) (chrome).
 
-## 🚀 Quick Installation
+## 🚀 Installation
 
-> ⚠️ **Note**: HACS installation has limitations for complete configurations. See [Installation Issue](INSTALLATION_ISSUE.md)
+> **� [SIMPLE INSTALL GUIDE](SIMPLE_INSTALL.md)** - Download & copy files (easiest!)  
+> **⚡ [5-Minute Quick Start](QUICK_START.md)** - For beginners  
+> **📖 [Complete Guide](ADD_TO_HOMEASSISTANT.md)** - Detailed walkthrough
 
-### **Method 1: Direct Download (Recommended)**
-1. **Download ZIP**: Click **"Code" → "Download ZIP"** from this repository
-2. **Extract files** to your computer
-3. **Backup your current Home Assistant configuration**
-4. **Copy all files** to your Home Assistant `/config/` folder
-5. **Run setup script**: `./deployment/scripts/setup.sh` or manually edit `secrets.yaml`
-6. **Restart Home Assistant**
+⚠️ **HACS Installation Not Recommended** - Use direct download instead
 
-### **Method 2: Git Clone (Advanced)**
-```bash
-cd /config
-git clone https://github.com/juangarcia0482/home-assistance.git temp
-cp -r temp/* .
-rm -rf temp
-```
+### **Quick Steps:**
+1. **[Download ZIP](https://github.com/juangarcia0482/home-assistance/archive/refs/heads/main.zip)** from this repository
+2. **Extract** and **copy files** to your Home Assistant `/config/` folder  
+3. **Install frontend cards** from HACS → Frontend
+4. **Edit settings** and **restart**
 
-### ~~Method 3: HACS Installation~~ (Has Issues)
-~~HACS downloads to wrong location for complete configurations.~~  
-**If you used HACS**: Copy files from `/config/www/community/home-assistance/` to `/config/`
-
-> **⚡ [SUPER SIMPLE 5-Minute Guide](QUICK_START.md)** - For beginners  
-> **📖 [Complete Step-by-Step Guide](ADD_TO_HOMEASSISTANT.md)** - Detailed walkthrough
+**→ [Follow the Simple Install Guide](SIMPLE_INSTALL.md)** for detailed steps
 
 ### Manual Installation
 ```bash
