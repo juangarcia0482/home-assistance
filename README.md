@@ -18,12 +18,12 @@ Operating System: 5.13
 
 #### **Step 1: Add Repository to HACS**
 1. **Go to HACS** in your Home Assistant
-2. **Click on "Integrations"**
+2. **Click on "Frontend"** (Dashboard section)
 3. **Click the three dots** (⋮) in the top right corner
 4. **Select "Custom repositories"**
 5. **Add this repository:**
    - Repository: `https://github.com/juangarcia0482/home-assistance`
-   - Category: `Integration`
+   - Type: `Dashboard`
    - Click "Add"
 6. **Download the configuration:**
    - Search for "Home Assistant Configuration - LAJV"
