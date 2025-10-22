@@ -1,6 +1,4 @@
 {
   "name": "Home Assistant Configuration - LAJV",
-  "filename": "home-assistance.js",
-  "render_readme": true,
-  "homeassistant": "2021.5.0"
+"homeassistant": "2021.5.0"
 }

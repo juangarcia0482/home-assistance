@@ -17,19 +17,29 @@ Operating System: 5.13
 - ✅ [HACS (Home Assistant Community Store)](https://hacs.xyz/) installed and configured
 
 #### **Step 1: Add Repository to HACS**
+
+> **⚠️ Important**: If you previously added this repository, **remove it first**:
+> 1. Go to HACS → Three dots → Custom repositories
+> 2. Find "home-assistance" repository and delete it
+> 3. Restart Home Assistant
+> 4. Then follow the steps below
+
 1. **Go to HACS** in your Home Assistant
-2. **Click on "Frontend"** (Dashboard section)
+2. **Click on "Frontend"** (Dashboard section) 
 3. **Click the three dots** (⋮) in the top right corner
 4. **Select "Custom repositories"**
 5. **Add this repository:**
    - Repository: `https://github.com/juangarcia0482/home-assistance`
-   - Type: `Theme`
+   - Type: **Leave empty/blank** (don't select any category)
    - Click "Add"
 6. **Download the configuration:**
-   - Search for "Home Assistant Configuration - LAJV"
-   - Click "Download this repository with HACS"
+   - The repository will be added as a custom repository
+   - All files will download uncompressed to `/www/community/home-assistance/`
 
-#### **Step 2: Install Required Frontend Cards**
+> **📁 After download, you should see:**
+> - `/www/community/home-assistance/` folder with all configuration files
+> - All files should be uncompressed (no .gz files)
+> - Configuration files: `ui-lovelace.yaml`, `configuration.yaml`, etc.#### **Step 2: Install Required Frontend Cards**
 7. **Go to HACS → Frontend** (different section!)
 8. **Install each card** listed in "Required Frontend Components" below
 
