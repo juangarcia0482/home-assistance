@@ -8,6 +8,8 @@ Operating System: 5.13
 
 ## 🚀 Quick Installation
 
+> **📖 [Complete Step-by-Step Guide: How to Add This to Home Assistant](ADD_TO_HOMEASSISTANT.md)**
+
 ### HACS Installation (Recommended)
 1. **Go to HACS** in your Home Assistant
 2. **Click on "Integrations"**

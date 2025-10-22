@@ -22,11 +22,14 @@ Configuration templates for users:
 ## 🚀 For End Users
 
 ### Quick Start
-1. Install via HACS or clone the repository
-2. Run the appropriate setup script:
+1. **Follow the complete guide**: [How to Add This to Home Assistant](../ADD_TO_HOMEASSISTANT.md)
+2. **Or use HACS directly:**
+   - Add `https://github.com/juangarcia0482/home-assistance` as custom repository
+   - Download "Home Assistant Configuration - LAJV"
+3. **Run setup script:**
    - **Windows**: `.\deployment\scripts\setup.ps1`
    - **Linux/macOS**: `./deployment/scripts/setup.sh`
-3. Follow the instructions in `deployment/docs/INSTALLATION.md`
+4. **Follow instructions in** `deployment/docs/INSTALLATION.md`
 
 ### What the Setup Script Does
 - Creates `secrets.yaml` from template
