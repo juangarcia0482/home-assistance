@@ -8,10 +8,15 @@ Operating System: 5.13
 
 ## 🚀 Installation
 
-> **📖 [Complete HACS Installation Guide](HACS_INSTALLATION.md)** - Step-by-step HACS method  
-> **⚡ [5-Minute Quick Start](QUICK_START.md)** - For beginners
+> **✨ Simple 3-step process: Add repo → Install cards → Copy files → Done!**
 
 ### **Method 1: HACS Installation (Recommended)**
+
+#### **Prerequisites**
+- ✅ Home Assistant Core 2021.5+ installed
+- ✅ [HACS (Home Assistant Community Store)](https://hacs.xyz/) installed and configured
+
+#### **Step 1: Add Repository to HACS**
 1. **Go to HACS** in your Home Assistant
 2. **Click on "Integrations"**
 3. **Click the three dots** (⋮) in the top right corner
@@ -23,61 +28,146 @@ Operating System: 5.13
 6. **Download the configuration:**
    - Search for "Home Assistant Configuration - LAJV"
    - Click "Download this repository with HACS"
-7. **Copy essential files** (see below)
-8. **Install required frontend cards** from HACS → Frontend
+
+#### **Step 2: Install Required Frontend Cards**
+7. **Go to HACS → Frontend** (different section!)
+8. **Install each card** listed in "Required Frontend Components" below
+
+#### **Step 3: Copy Essential Files**
+9. **Copy essential files** using the commands in the section below
 
 ### **Method 2: Direct Download (Alternative)**
 1. **[Download ZIP](https://github.com/juangarcia0482/home-assistance/archive/refs/heads/main.zip)** from this repository
 2. **Extract** and **copy essential files** to your Home Assistant main config folder
 
-### **Required Frontend Components**
-Install these through **HACS → Frontend**:
-- Button Card
-- Card Mod  
-- Config Template Card
-- Bar Card
-- Mini Graph Card
-- Mini Media Player
+---
+
+## 🔧 Required Frontend Components
+**Install these separately through HACS → Frontend** (not custom repositories):
+
+> **📍 How to find HACS → Frontend:**
+> 1. Open **Home Assistant** sidebar
+> 2. Click **HACS** (should be in your sidebar)
+> 3. You'll see the main HACS page with search and filters
+> 4. In the **Type** filter, click **Dashboard** (this is the Frontend section!)
+> 5. Search for each card by name and install
+>
+> **Note**: "Dashboard" = Frontend cards in HACS interface
+
+1. **Button Card** by `@RomRider` 
+   - Filter Type: **Dashboard**, Search: "button-card" (with hyphen)
+   - [GitHub](https://github.com/custom-cards/button-card)
+
+2. **Card Mod** by `@thomasloven`
+   - Filter Type: **Dashboard**, Search: "card-mod" (with hyphen)
+   - [GitHub](https://github.com/thomasloven/lovelace-card-mod)
+
+3. **Config Template Card** by `@iantrich`
+   - Filter Type: **Dashboard**, Search: "config-template-card" (with hyphens)
+   - [GitHub](https://github.com/iantrich/config-template-card)
+
+4. **Bar Card** - Filter Type: **Dashboard**, Search: "bar-card" (with hyphen)
+   - **If not found, add as custom repository:**
+   - Go to HACS → Three dots (⋮) → Custom repositories
+   - Repository: `https://github.com/custom-cards/bar-card`
+   - Category: `Lovelace`
+   - Then search for "Bar Card" in Dashboard
+   - [GitHub](https://github.com/custom-cards/bar-card)
+
+5. **Mini Graph Card** - Filter Type: **Dashboard**, Search: "mini-graph-card" (with hyphens)
+   - [GitHub](https://github.com/kalkih/mini-graph-card)
+
+6. **Mini Media Player** - Filter Type: **Dashboard**, Search: "mini-media-player" (with hyphens)
+   - [GitHub](https://github.com/kalkih/mini-media-player)
 
 ## ✨ Essential Files to Copy
 
-After downloading via HACS or ZIP, you only need to copy these **4 core files**:
+After downloading via HACS or ZIP, you need to copy these **essential files**:
 
 ```
 📁 From HACS download location (www/community/home-assistance/) or ZIP
 │
 ├── 📄 ui-lovelace.yaml          → Copy to /homeassistant/
+├── 📄 ui-lovelace_mobile.yaml  → Copy to /homeassistant/
 ├── 📄 configuration.yaml       → Merge with your existing /homeassistant/configuration.yaml  
-├── 📄 secrets_template.yaml    → Copy as secrets.yaml to /homeassistant/
-└── 📁 www/                     → Copy entire folder to /homeassistant/www/
+├── 📄 button_card_templates.yaml → Copy to /homeassistant/
+├── 📄 groups.yaml              → Copy to /homeassistant/
+├── 📄 automations.yaml         → Copy to /homeassistant/
+├── 📄 scripts.yaml             → Copy to /homeassistant/
+├── 📄 scenes.yaml              → Copy to /homeassistant/
+├── 📄 customize.yaml           → Copy to /homeassistant/
+├── 📄 themes.yaml              → Copy to /homeassistant/
+├── 📄 homekit.yaml             → Copy to /homeassistant/
+├── 📄 deployment/templates/secrets_template.yaml → Copy as secrets.yaml to /homeassistant/
+└── 📁 www/                     → Merge contents into your existing /homeassistant/www/
+    ├── js/                     → Copy to /homeassistant/www/js/
+    ├── people/                 → Copy to /homeassistant/www/people/
+    ├── robot/                  → Copy to /homeassistant/www/robot/
+    ├── ui/                     → Copy to /homeassistant/www/ui/
+    ├── upcoming-media-card-images/ → Copy to /homeassistant/www/upcoming-media-card-images/
+    └── transparent.png         → Copy to /homeassistant/www/transparent.png
 ```
 
-> ⚠️ **Important**: Don't copy ALL files - just these 4 items contain everything needed for the 3D dashboard!
+### **🔄 Quick Copy Commands**
+
+**Option A: Batch Copy (Recommended)**
+Run this single command in your Home Assistant SSH terminal:
+```bash
+# Copy all essential files at once
+cp -r www/community/home-assistance/www/{js,people,robot,ui,upcoming-media-card-images} www/ && \
+cp www/community/home-assistance/www/transparent.png www/ && \
+cp www/community/home-assistance/{ui-lovelace.yaml,ui-lovelace_mobile.yaml,button_card_templates.yaml,groups.yaml,automations.yaml,scripts.yaml,scenes.yaml,customize.yaml,themes.yaml,homekit.yaml} /homeassistant/ && \
+cp www/community/home-assistance/deployment/templates/secrets_template.yaml /homeassistant/secrets.yaml
+```
+
+**Option B: Individual Commands**
+If batch fails, run these commands **one by one**:
+```bash
+# Clean up any previous failed attempts
+rm -rf www/www
+
+# Copy www folders
+cp -r www/community/home-assistance/www/js www/
+cp -r www/community/home-assistance/www/people www/
+cp -r www/community/home-assistance/www/robot www/
+cp -r www/community/home-assistance/www/ui www/
+cp -r www/community/home-assistance/www/upcoming-media-card-images www/
+
+# Copy www files
+cp www/community/home-assistance/www/transparent.png www/
+
+# Copy configuration files
+cp www/community/home-assistance/ui-lovelace.yaml /homeassistant/
+cp www/community/home-assistance/ui-lovelace_mobile.yaml /homeassistant/
+cp www/community/home-assistance/button_card_templates.yaml /homeassistant/
+cp www/community/home-assistance/groups.yaml /homeassistant/
+cp www/community/home-assistance/automations.yaml /homeassistant/
+cp www/community/home-assistance/scripts.yaml /homeassistant/
+cp www/community/home-assistance/scenes.yaml /homeassistant/
+cp www/community/home-assistance/customize.yaml /homeassistant/
+cp www/community/home-assistance/themes.yaml /homeassistant/
+cp www/community/home-assistance/homekit.yaml /homeassistant/
+cp www/community/home-assistance/deployment/templates/secrets_template.yaml /homeassistant/secrets.yaml
+```
+
+> ⚠️ **Important**: 
+> - Run these commands in **Home Assistant SSH terminal**, not local PowerShell
+> - Make sure you're in the `/homeassistant/` directory before running
+> - **Backup your existing configuration files first** if you have important customizations
 
 ## ⚠️ **Important Configuration Steps**
 
 > **Note**: Your main config folder might be `/config/` or `/homeassistant/` depending on your installation
 
-After installation, you **must** edit these:
+After installation, you **must** customize these:
 
-1. **Copy files** from `www/community/home-assistance/` to your main config folder
-2. **Edit `secrets.yaml`** with your real credentials  
-3. **Update IP addresses** in `configuration.yaml`
-4. **Replace light entity names** with your actual entities
-5. **Install frontend cards** listed above
+1. **Copy essential files** from `www/community/home-assistance/` to your main config folder (see commands above)
+2. **Install frontend cards** - Go to HACS → Frontend and install the 6 cards listed above  
+3. **Edit `secrets.yaml`** with your real credentials  
+4. **Update IP addresses** in `configuration.yaml`
+5. **Replace light entity names** with your actual entities
 
-### Manual Installation
-```bash
-git clone https://github.com/YOUR_USERNAME/home-assistance.git
-cd home-assistance
-# Windows
-.\deployment\scripts\setup.ps1
-# Linux/macOS  
-./deployment/scripts/setup.sh
-```
-Then follow the [detailed installation guide](deployment/docs/INSTALLATION.md)
-
-⚠️ **Important**: This configuration requires customization for your specific setup. See [deployment/docs/INSTALLATION.md](deployment/docs/INSTALLATION.md) for detailed instructions.
+> ⚠️ **Important**: This configuration requires customization for your specific setup. The original config has specific light entities and IP addresses that need to be replaced with your own.
 
 [Video of Full UI](https://www.youtube.com/watch?v=KcfZc1MXP_A)
 

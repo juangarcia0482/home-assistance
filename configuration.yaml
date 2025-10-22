@@ -135,7 +135,7 @@ mqtt:
   username: !secret mqtt_user_name
   password: !secret mqtt_password
   discovery: true
-  
+
   
 #################################################################
 ## Components
