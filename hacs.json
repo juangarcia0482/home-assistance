@@ -1,8 +1,5 @@
 {
   "name": "Home Assistant Configuration - LAJV",
-  "content_type": "plugin",
   "render_readme": true,
-  "homeassistant": "2021.5.0",
-  "zip_release": false,
-  "hide_default_branch": false
+  "homeassistant": "2021.5.0"
 }
