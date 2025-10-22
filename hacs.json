@@ -1,5 +1,7 @@
 {
   "name": "Home Assistant Configuration - LAJV",
+  "content_type": "integration",
   "render_readme": true,
-  "homeassistant": "2021.5.0"
+  "homeassistant": "2021.5.0",
+  "iot_class": "Local Polling"
 }
