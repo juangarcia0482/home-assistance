@@ -45,6 +45,14 @@ home-assistant.log*
 # www/community/
 # custom_components/hacs/
 
+# Prevent accumulation of unnecessary files
+ui-source/
+deployment/
+previews/
+dist/
+*.md
+VERSION
+
 # Local development
 .pytest_cache/
 .coverage
