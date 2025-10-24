@@ -1,6 +1,8 @@
 
 # Home Assistant specific files
 secrets.yaml
+secrets.ps1
+config.json
 known_devices.yaml
 *.log
 *.db
