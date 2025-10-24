@@ -1,0 +1,13 @@
+<div class="room-section">
+    <div class="room-header" [class.expanded]="expanded()" (click)="toggleRoom()">
+        <span class="room-name">{{ room.name }}</span>
+        <span class="room-toggle">▼</span>
+    </div>
+
+    <div class="room-content" [class.expanded]="expanded()">
+        @for (light of getRoomLights(); track light.entity_id) {
+        <app-light-item [entity]="light" (lightAction)="onLightAction($event)">
+        </app-light-item>
+        }
+    </div>
+</div>

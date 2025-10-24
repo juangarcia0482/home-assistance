@@ -1,0 +1,96 @@
+.light-item {
+    padding: 12px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #f8f9ff;
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.light-name {
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.light-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+
+    &.on {
+        background: #4CAF50;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+    }
+}
+
+.light-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.power-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-size: cover;
+    background-position: center;
+
+    &.on {
+        background-image: url('/local/ui/btns/lights_on.png');
+    }
+
+    &.off {
+        background-image: url('/local/ui/btns/lights_off.png');
+    }
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.brightness-slider {
+    width: 80px;
+    height: 4px;
+    background: #ddd;
+    outline: none;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        background: #667eea;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    &::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        background: #667eea;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+    }
+}

@@ -1,0 +1,43 @@
+<div class="light-control-container">
+    <!-- Left Menu Panel -->
+    <div class="menu-panel">
+        <div class="menu-header">
+            <h1>🏠 Light Control</h1>
+            <p>Smart Home Lighting System</p>
+        </div>
+
+        <div class="connection-status" [class.connected]="connectionStatus()">
+            {{ connectionStatus() ? 'Connected to Home Assistant' : 'Demo Mode - Not Connected' }}
+        </div>
+
+        <!-- Room Sections -->
+        <div class="room-sections">
+            @for (room of rooms; track room.id) {
+            <app-room-section [room]="room" [entities]="entities()" (lightAction)="onLightAction($event)">
+            </app-room-section>
+            }
+        </div>
+
+        <!-- Master Controls -->
+        <div class="master-controls">
+            <button class="master-btn all-on-btn" (click)="onAllLightsOn()">
+                <img src="/local/ui/btns/all_on.png" alt="All On" class="btn-icon">
+                Turn All Lights ON
+            </button>
+            <button class="master-btn all-off-btn" (click)="onAllLightsOff()">
+                <img src="/local/ui/btns/all_off.png" alt="All Off" class="btn-icon">
+                Turn All Lights OFF
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Display Panel -->
+    <div class="display-panel">
+        <div class="bg-pattern"></div>
+        <div class="display-content">
+            <div class="display-image" [style.background-image]="'url(' + currentDisplayImage() + ')'"></div>
+            <h2 class="display-title">{{ displayTitle() }}</h2>
+            <p class="display-subtitle">{{ displaySubtitle() }}</p>
+        </div>
+    </div>
+</div>

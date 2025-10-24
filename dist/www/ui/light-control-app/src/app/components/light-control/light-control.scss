@@ -1,0 +1,198 @@
+.light-control-container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Left Menu Panel */
+.menu-panel {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+
+    h1 {
+        font-size: 24px;
+        font-weight: 300;
+        margin: 0 0 5px 0;
+    }
+
+    p {
+        font-size: 14px;
+        opacity: 0.8;
+        margin: 0;
+    }
+}
+
+.connection-status {
+    padding: 10px 20px;
+    background: #f44336;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+
+    &.connected {
+        background: #4CAF50;
+    }
+}
+
+.room-sections {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Master Controls */
+.master-controls {
+    padding: 20px;
+    background: white;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+}
+
+.master-btn {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.all-on-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.all-off-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Right Display Panel */
+.display-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.display-content {
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.display-image {
+    width: 300px;
+    height: 300px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 20px 0;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+    transition: all 0.5s ease;
+}
+
+.display-title {
+    font-size: 32px;
+    font-weight: 300;
+    margin: 0 0 10px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.display-subtitle {
+    font-size: 18px;
+    opacity: 0.8;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    margin: 0;
+}
+
+/* Background Effects */
+.bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    background-image:
+        radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
+        radial-gradient(circle at 40% 20%, white 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, white 1px, transparent 1px);
+    background-size: 100px 100px, 150px 150px, 120px 120px;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .light-control-container {
+        flex-direction: column;
+    }
+
+    .menu-panel {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .display-panel {
+        height: 60vh;
+    }
+
+    .display-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .display-title {
+        font-size: 24px;
+    }
+
+    .display-subtitle {
+        font-size: 16px;
+    }
+}

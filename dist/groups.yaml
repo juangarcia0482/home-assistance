@@ -1,74 +1,75 @@
-# ALL LIGHT GROUPS COMMENTED OUT - Individual lights are unavailable
-# Uncomment when Z-Wave/Zigbee light network is restored
+# DEVELOPMENT GROUPS - Using mock light entities for UI testing
+# These groups use the same structure as your planned real groups
+# When you install real devices, the entity IDs will match exactly
 
-# roof:
-#     name: Roof
-#     entities:
-#       - light.roof_garden
-#       - light.roof_plants
-# kitchen:
-#     name: Kitchen
-#     entities:
-#       - light.kitchen_1
-#       - light.kitchen_2
-#       - light.kitchen_3
-#       - light.kitchen_4
-# kitchen_fridge:
-#     name: Kitchen Fridge
-#     entities:
-#       - light.kitchen_1
-#       - light.kitchen_2
-# kitchen_sink:
-#     name: Kitchen Sink
-#     entities:
-#       - light.kitchen_3
-#       - light.kitchen_4
-# livingroom:
-#     name: LivingRoom
-#     entities:
-#       - light.couch
-#       - light.table
-#       - light.plant_table
-# toilet:
-#     name: Toilet
-#     entities:
-#       - light.toilet_1
-#       - light.toilet_2
-# study:
-#     name: Study
-#     entities:
-#       - light.study_2
-# bedroom:
-#     name: Bedroom
-#     entities:
-#       - light.bedroom_roof
-#       - light.bed
-# stairs:
-#     name: Stairs
-#     entities:
-#       - light.stairs_2
-#       - light.door
-# balcony:
-#     name: Balcony
-#     entities:
-#       - light.balcony_2
-# all_lights:
-#     name: All Lights
-#     entities:
-#       - light.roof_garden
-#       - light.roof_plants
-#       - light.kitchen_1
-#       - light.kitchen_2
-#       - light.kitchen_3
-#       - light.kitchen_4
-#       - light.couch
-#       - light.table
-#       - light.plant_table
-#       - light.toilet_1
-#       - light.toilet_2
-#       - light.study_2
-#       - light.bedroom_roof
-#       - light.bed
-#       - light.stairs_2
-#       - light.door
-#       - light.balcony_2
+roof:
+  name: Roof
+  entities:
+    - light.roof_garden
+    - light.roof_plants
+kitchen:
+  name: Kitchen
+  entities:
+    - light.kitchen_1
+    - light.kitchen_2
+    - light.kitchen_3
+    - light.kitchen_4
+kitchen_fridge:
+  name: Kitchen Fridge
+  entities:
+    - light.kitchen_1
+    - light.kitchen_2
+kitchen_sink:
+  name: Kitchen Sink
+  entities:
+    - light.kitchen_3
+    - light.kitchen_4
+livingroom:
+  name: LivingRoom
+  entities:
+    - light.couch
+    - light.table
+    - light.cabinet
+toilet:
+  name: Toilet
+  entities:
+    - light.toilet_1
+    - light.toilet_2
+study:
+  name: Study
+  entities:
+    - light.study
+bedroom:
+  name: Bedroom
+  entities:
+    - light.bedroom_roof
+    - light.bed
+stairs:
+  name: Stairs
+  entities:
+    - light.stairs
+    - light.door
+balcony:
+  name: Balcony
+  entities:
+    - light.balcony
+all_lights:
+  name: All Lights
+  entities:
+    - light.roof_garden
+    - light.roof_plants
+    - light.kitchen_1
+    - light.kitchen_2
+    - light.kitchen_3
+    - light.kitchen_4
+    - light.couch
+    - light.table
+    - light.cabinet
+    - light.toilet_1
+    - light.toilet_2
+    - light.study
+    - light.bedroom_roof
+    - light.bed
+    - light.stairs
+    - light.door
+    - light.balcony

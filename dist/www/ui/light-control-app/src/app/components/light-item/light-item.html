@@ -1,0 +1,15 @@
+<div class="light-item">
+    <div class="light-name">
+        <div [class]="statusClass"></div>
+        {{ friendlyName }}
+    </div>
+
+    <div class="light-controls">
+        <button [class]="powerButtonClass" (click)="toggleLight()">
+            <!-- Button background images handled by CSS -->
+        </button>
+
+        <input type="range" class="brightness-slider" min="0" max="255" [value]="brightness()"
+            (input)="onBrightnessChange($event)">
+    </div>
+</div>
