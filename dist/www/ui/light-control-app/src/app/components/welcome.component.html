@@ -201,8 +201,15 @@
                         💡 Please select at least one device to continue with the setup
                     </p>
                 </div>
-            </div> <!-- Rooms Step (moved to step 3) -->
-            <div *ngIf="currentStep() === 3" class="rooms-step">
+            </div>
+        </div>
+        <div *ngIf="currentStep() === 3" class="rooms-step">
+            <div class="info-banner">
+                <div class="info-icon">💡</div>
+                <p>
+                    You can customize room assignments for your devices later in the app settings.
+                    This step helps organize your smart home for a better experience.
+                </p>
                 <div class="step-header">
                     <h2>{{currentStepInfo().title}}</h2>
                     <p>{{currentStepInfo().subtitle}}</p>
@@ -250,7 +257,6 @@
                     </button>
                 </div>
             </div>
-
             <!-- Complete Step -->
             <div *ngIf="currentStep() === 4" class="complete-step">
                 <div class="success-animation">
@@ -294,3 +300,4 @@
             </div>
         </div>
     </div>
+</div>
