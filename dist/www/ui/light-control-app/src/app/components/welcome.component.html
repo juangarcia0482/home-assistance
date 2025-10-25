@@ -204,55 +204,473 @@
             </div>
         </div>
         <div *ngIf="currentStep() === 3" class="rooms-step">
-            <div class="info-banner">
-                <div class="step-header">
-                    <h2>{{currentStepInfo().title}}</h2>
-                    <p>{{currentStepInfo().subtitle}}</p>
+            <div class="step-header">
+                <h2>{{currentStepInfo().title}}</h2>
+                <p>{{currentStepInfo().subtitle}}</p>
+                <div class="room-stats">
+                    <div class="stat-card">
+                        <span class="stat-number">{{allRooms().length}}</span>
+                        <span class="stat-label">Total Rooms</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">{{getSelectedDeviceCount()}}</span>
+                        <span class="stat-label">Devices to Organize</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">{{getAssignedDeviceCount()}}</span>
+                        <span class="stat-label">Devices Assigned</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Room Organization Wizard Progress -->
+            <div class="organization-modes">
+                <div class="mode-tabs wizard-tabs">
+                    <button class="mode-tab" [class.active]="organizationMode() === 'setup'"
+                        [class.completed]="organizationMode() !== 'setup' && allRooms().length > 0"
+                        (click)="setOrganizationMode('setup')">
+                        <span class="step-number">1</span>
+                        <span class="step-label">🏠 Setup Rooms</span>
+                    </button>
+                    <div class="wizard-arrow">→</div>
+                    <button class="mode-tab" [class.active]="organizationMode() === 'assign'"
+                        [class.completed]="organizationMode() === 'preview'" [disabled]="allRooms().length === 0"
+                        (click)="setOrganizationMode('assign')">
+                        <span class="step-number">2</span>
+                        <span class="step-label">📱 Assign Devices</span>
+                    </button>
+                    <div class="wizard-arrow">→</div>
+                    <button class="mode-tab" [class.active]="organizationMode() === 'preview'"
+                        [disabled]="allRooms().length === 0" (click)="setOrganizationMode('preview')">
+                        <span class="step-number">3</span>
+                        <span class="step-label">👁️ Preview Layout</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Setup Rooms Mode -->
+            <div *ngIf="organizationMode() === 'setup'" class="room-setup-mode">
+                <!-- Quick Room Templates -->
+                <div class="room-templates">
+                    <h3>✨ Quick Setup Templates</h3>
+                    <div class="template-cards">
+                        <div *ngFor="let template of roomTemplates; trackBy: trackTemplate" class="template-card"
+                            [class.selected]="selectedTemplate() === template" (click)="applyRoomTemplate(template)">
+                            <div class="template-icon">{{template.icon}}</div>
+                            <div class="template-info">
+                                <h4>{{template.name}}</h4>
+                                <span class="template-rooms">{{template.rooms.length}} rooms</span>
+                            </div>
+                            <div *ngIf="selectedTemplate() === template" class="selected-indicator">✓</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="room-setup">
-                    <h3>Suggested Rooms</h3>
-                    <div class="rooms-grid">
-                        <div *ngFor="let room of defaultRooms; trackBy: trackRoom" class="room-card suggested">
-                            <div class="room-icon">{{room.icon}}</div>
-                            <span class="room-name">{{room.name}}</span>
-                            <div class="room-badge">Suggested</div>
+                <!-- Current Rooms -->
+                <div class="current-rooms">
+                    <div class="rooms-header">
+                        <h3>🏠 Your Rooms</h3>
+                        <div class="room-actions">
+                            <button class="btn-outline small" (click)="clearAllRooms()"
+                                [disabled]="allRooms().length === 0">
+                                Clear All
+                            </button>
+                            <button class="btn-outline small" (click)="resetRoomOrganization()">
+                                🔄 Reset All
+                            </button>
+                            <button class="btn-primary small" (click)="showAddRoomDialog.set(true)">
+                                + Add Room
+                            </button>
                         </div>
                     </div>
 
-                    <div *ngIf="customRooms().length > 0">
-                        <h3>Your Custom Rooms</h3>
-                        <div class="rooms-grid">
-                            <div *ngFor="let room of customRooms(); trackBy: trackRoom" class="room-card custom">
-                                <div class="room-icon">{{room.icon}}</div>
+                    <div class="rooms-grid enhanced">
+                        <div *ngFor="let room of allRooms(); trackBy: trackRoom" class="room-card interactive"
+                            [class.suggested]="room.suggested" [class.has-devices]="getRoomDeviceCount(room) > 0"
+                            [class.drag-over]="isDragOver(room.id)">
+
+                            <div class="room-header">
+                                <div class="room-icon editable" (click)="showEmojiPicker(room)">{{room.icon}}</div>
+                                <button class="room-menu" (click)="toggleRoomMenu(room.id)">⋮</button>
+                                <div *ngIf="activeRoomMenu() === room.id" class="room-menu-dropdown">
+                                    <button (click)="editRoom(room)">✏️ Edit</button>
+                                    <button (click)="duplicateRoom(room)">📋 Duplicate</button>
+                                    <button (click)="removeRoom(room)" [disabled]="room.suggested">🗑️ Delete</button>
+                                </div>
+                            </div>
+
+                            <div class="room-content">
                                 <span class="room-name">{{room.name}}</span>
-                                <button class="remove-btn" (click)="removeRoom(room)">×</button>
+
+                                <div class="room-stats">
+                                    <div class="device-count">
+                                        <span class="count">{{getRoomDeviceCount(room)}}</span>
+                                        <span class="label">devices</span>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="room.suggested" class="room-badge suggested">Suggested</div>
+                                <div *ngIf="!room.suggested" class="room-badge custom">Custom</div>
+                            </div>
+
+                            <div class="room-preview" *ngIf="getRoomDeviceCount(room) > 0">
+                                <div class="preview-devices">
+                                    <span *ngFor="let device of getRoomDevices(room).slice(0, 3)"
+                                        class="device-preview">
+                                        {{getDeviceIcon(device)}}
+                                    </span>
+                                    <span *ngIf="getRoomDeviceCount(room) > 3" class="more-devices">
+                                        +{{getRoomDeviceCount(room) - 3}}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="add-room">
-                        <h3>Add Custom Room</h3>
-                        <div class="add-room-form">
-                            <input type="text" [(ngModel)]="newRoomName" placeholder="Enter room name..."
-                                (keydown.enter)="addCustomRoom()" class="room-input">
-                            <button class="btn-add" (click)="addCustomRoom()" [disabled]="!newRoomName().trim()">
-                                Add Room
+                <!-- Advanced Room Creator -->
+                <div *ngIf="showAddRoomDialog()" class="add-room-dialog">
+                    <div class="dialog-backdrop" (click)="showAddRoomDialog.set(false)"></div>
+                    <div class="dialog-content">
+                        <div class="dialog-header">
+                            <h3>Create New Room</h3>
+                            <button class="close-btn" (click)="showAddRoomDialog.set(false)">×</button>
+                        </div>
+
+                        <div class="dialog-body">
+                            <div class="form-group">
+                                <label>Room Name</label>
+                                <input type="text" [(ngModel)]="newRoomName" placeholder="e.g., Master Bedroom"
+                                    class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Room Icon</label>
+                                <div class="icon-selector">
+                                    <div *ngFor="let icon of availableRoomIcons" class="icon-option"
+                                        [class.selected]="newRoomIcon() === icon" (click)="newRoomIcon.set(icon)">
+                                        {{icon}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Room Type</label>
+                                <select [ngModel]="newRoomType()" (ngModelChange)="newRoomType.set($event)"
+                                    class="form-select">
+                                    <option value="living">Living Space</option>
+                                    <option value="bedroom">Bedroom</option>
+                                    <option value="kitchen">Kitchen</option>
+                                    <option value="bathroom">Bathroom</option>
+                                    <option value="office">Office</option>
+                                    <option value="utility">Utility</option>
+                                    <option value="outdoor">Outdoor</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="dialog-actions">
+                            <button class="btn-secondary" (click)="showAddRoomDialog.set(false)">Cancel</button>
+                            <button class="btn-primary" (click)="addCustomRoomAdvanced()"
+                                [disabled]="!newRoomName().trim()">
+                                Create Room
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="step-actions">
-                    <button class="btn-secondary" (click)="previousStep()">
-                        ← Back
-                    </button>
-                    <button class="btn-primary" (click)="nextStep()">
-                        Continue to Completion →
+                <!-- Edit Room Dialog -->
+                <div *ngIf="showEditRoomDialog()" class="add-room-dialog">
+                    <div class="dialog-backdrop" (click)="cancelEditRoom()"></div>
+                    <div class="dialog-content">
+                        <div class="dialog-header">
+                            <h3>Update Room</h3>
+                            <button class="close-btn" (click)="cancelEditRoom()">×</button>
+                        </div>
+
+                        <div class="dialog-body">
+                            <div class="form-group">
+                                <label>Room Name <span class="required">*</span></label>
+                                <input type="text" [ngModel]="editRoomName()" (ngModelChange)="editRoomName.set($event)"
+                                    placeholder="e.g., Master Bedroom" class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Room Icon <span class="required">*</span></label>
+                                <div class="icon-selector">
+                                    <div *ngFor="let icon of availableRoomIcons" class="icon-option"
+                                        [class.selected]="editRoomIcon() === icon" (click)="editRoomIcon.set(icon)">
+                                        {{icon}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Room Type</label>
+                                <select [ngModel]="editRoomType()" (ngModelChange)="editRoomType.set($event)"
+                                    class="form-select">
+                                    <option value="living">Living Space</option>
+                                    <option value="bedroom">Bedroom</option>
+                                    <option value="kitchen">Kitchen</option>
+                                    <option value="bathroom">Bathroom</option>
+                                    <option value="office">Office</option>
+                                    <option value="utility">Utility</option>
+                                    <option value="outdoor">Outdoor</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="editingRoomData()?.suggested" class="form-note">
+                                <p>💡 Note: Editing a suggested room will create a custom copy.</p>
+                            </div>
+                        </div>
+
+                        <div class="dialog-actions">
+                            <button class="btn-secondary" (click)="cancelEditRoom()">Cancel</button>
+                            <button class="btn-primary" (click)="saveEditedRoom()"
+                                [disabled]="!editRoomName().trim() || !editRoomIcon()">
+                                Update Room
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wizard Navigation for Setup Mode -->
+                <div class="wizard-navigation">
+                    <div class="wizard-info">
+                        <span *ngIf="allRooms().length === 0" class="warning-text">
+                            ⚠️ Add at least one room to continue
+                        </span>
+                        <span *ngIf="allRooms().length > 0" class="success-text">
+                            ✓ {{allRooms().length}} room(s) configured
+                        </span>
+                    </div>
+                    <button class="btn-primary wizard-btn" (click)="nextRoomWizardStep()"
+                        [disabled]="allRooms().length === 0">
+                        Next: Assign Devices →
                     </button>
                 </div>
             </div>
 
+            <!-- Assign Devices Mode -->
+            <div *ngIf="organizationMode() === 'assign'" class="device-assignment-mode">
+                <div class="assignment-layout">
+                    <!-- Unassigned Devices Panel -->
+                    <div class="unassigned-panel">
+                        <div class="panel-header">
+                            <h3>📦 Unassigned Devices</h3>
+                            <span class="device-count">{{getUnassignedDevices().length}} devices</span>
+                        </div>
+
+                        <div class="device-filters">
+                            <select [ngModel]="deviceTypeFilter()" (ngModelChange)="deviceTypeFilter.set($event)"
+                                class="filter-select">
+                                <option value="">All Device Types</option>
+                                <option *ngFor="let category of deviceCategories()" [value]="category.type">
+                                    {{category.icon}} {{category.name}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="unassigned-devices">
+                            <div *ngFor="let device of getFilteredUnassignedDevices(); trackBy: trackDevice"
+                                class="device-item draggable" [attr.data-device-id]="device.entity_id"
+                                (dragstart)="onDeviceDragStart($event, device)" draggable="true">
+
+                                <div class="device-icon">{{getDeviceIcon(device)}}</div>
+                                <div class="device-info">
+                                    <div class="device-name">{{device.attributes?.friendly_name || device.entity_id}}
+                                    </div>
+                                    <div class="device-type">{{getDeviceTypeLabel(device)}}</div>
+                                </div>
+
+                                <div class="device-actions">
+                                    <select class="quick-assign" (change)="quickAssignDevice(device, $event)"
+                                        [value]="''">
+                                        <option value="">Assign to...</option>
+                                        <option *ngFor="let room of allRooms()" [value]="room.id">
+                                            {{room.icon}} {{room.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="getUnassignedDevices().length === 0" class="empty-state">
+                            <div class="empty-icon">🎉</div>
+                            <h4>All Devices Assigned!</h4>
+                            <p>Great job organizing your smart home</p>
+                        </div>
+                    </div>
+
+                    <!-- Room Assignment Panels -->
+                    <div class="rooms-assignment-grid">
+                        <div *ngFor="let room of allRooms(); trackBy: trackRoom" class="room-assignment-card"
+                            [class.drag-over]="isDragOver(room.id)" (dragover)="onRoomDragOver($event, room)"
+                            (drop)="onRoomDrop($event, room)" (dragleave)="onRoomDragLeave($event, room)">
+
+                            <div class="room-header">
+                                <div class="room-icon">{{room.icon}}</div>
+                                <div class="room-info">
+                                    <h4>{{room.name}}</h4>
+                                    <span class="room-device-count">{{getRoomDeviceCount(room)}} devices</span>
+                                </div>
+                                <button class="room-clear" (click)="clearRoomDevices(room)"
+                                    [disabled]="getRoomDeviceCount(room) === 0"
+                                    title="Remove all devices from this room">
+                                    🗑️
+                                </button>
+                            </div>
+
+                            <div class="room-devices">
+                                <div *ngFor="let device of getRoomDevices(room); trackBy: trackDevice"
+                                    class="assigned-device" [attr.data-device-id]="device.entity_id"
+                                    (dragstart)="onDeviceDragStart($event, device)" draggable="true">
+
+                                    <div class="device-icon">{{getDeviceIcon(device)}}</div>
+                                    <div class="device-name">{{device.attributes?.friendly_name || device.entity_id}}
+                                    </div>
+                                    <button class="remove-device"
+                                        (click)="removeDeviceFromRoom(device, room)">×</button>
+                                </div>
+
+                                <div class="drop-zone" [class.active]="isDragOver(room.id)"
+                                    *ngIf="getRoomDeviceCount(room) === 0">
+                                    <div class="drop-message">
+                                        <div class="drop-icon">📱</div>
+                                        <span>Drag devices here</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart Assignment Suggestions -->
+                <div class="smart-suggestions" *ngIf="getSmartAssignmentSuggestions().length > 0">
+                    <h3>🤖 Smart Assignment Suggestions</h3>
+                    <div class="suggestions-list">
+                        <div *ngFor="let suggestion of getSmartAssignmentSuggestions()" class="suggestion-item">
+                            <div class="suggestion-info">
+                                <span class="device-name">{{suggestion.device.attributes?.friendly_name}}</span>
+                                <span class="suggestion-arrow">→</span>
+                                <span class="room-name">{{suggestion.room.icon}} {{suggestion.room.name}}</span>
+                                <span class="confidence">{{suggestion.confidence}}% confident</span>
+                            </div>
+                            <div class="suggestion-actions">
+                                <button class="btn-small btn-primary" (click)="acceptSuggestion(suggestion)">
+                                    ✓ Accept
+                                </button>
+                                <button class="btn-small btn-outline" (click)="dismissSuggestion(suggestion)">
+                                    ✕ Dismiss
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-outline" (click)="acceptAllSuggestions()">
+                        Accept All Suggestions
+                    </button>
+                </div>
+
+                <!-- Wizard Navigation for Assign Mode -->
+                <div class="wizard-navigation">
+                    <button class="btn-secondary wizard-btn" (click)="previousRoomWizardStep()">
+                        ← Back to Setup Rooms
+                    </button>
+                    <div class="wizard-info">
+                        <span>{{getAssignedDeviceCount()}} of {{getSelectedDeviceCount()}} devices assigned</span>
+                    </div>
+                    <button class="btn-primary wizard-btn" (click)="nextRoomWizardStep()">
+                        Next: Preview Layout →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Layout Mode -->
+            <div *ngIf="organizationMode() === 'preview'" class="preview-mode">
+                <div class="preview-controls">
+                    <div class="view-options">
+                        <button class="view-btn" [class.active]="previewView() === 'grid'"
+                            (click)="setPreviewView('grid')">
+                            ⊞ Grid View
+                        </button>
+                        <button class="view-btn" [class.active]="previewView() === 'list'"
+                            (click)="setPreviewView('list')">
+                            ☰ List View
+                        </button>
+                        <button class="view-btn" [class.active]="previewView() === 'compact'"
+                            (click)="setPreviewView('compact')">
+                            ▦ Compact View
+                        </button>
+                    </div>
+
+                    <div class="preview-stats">
+                        <span class="completion-rate">
+                            {{getOrganizationCompletionRate()}}% Complete
+                        </span>
+                    </div>
+                </div>
+
+                <div class="room-preview-grid" [class]="previewView()">
+                    <div *ngFor="let room of allRooms(); trackBy: trackRoom" class="room-preview-card">
+                        <div class="room-preview-header">
+                            <div class="room-icon">{{room.icon}}</div>
+                            <div class="room-info">
+                                <h4>{{room.name}}</h4>
+                                <span class="device-count">{{getRoomDeviceCount(room)}} devices</span>
+                            </div>
+                        </div>
+
+                        <div class="room-preview-content">
+                            <div *ngIf="getRoomDevices(room).length > 0; else emptyRoom" class="device-grid">
+                                <div *ngFor="let device of getRoomDevices(room); trackBy: trackDevice"
+                                    class="device-preview-item">
+                                    <div class="device-icon">{{getDeviceIcon(device)}}</div>
+                                    <div class="device-name">{{device.attributes?.friendly_name || device.entity_id}}
+                                    </div>
+                                    <div class="device-status" [class]="getDeviceStatusClass(device)">
+                                        {{device.state}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ng-template #emptyRoom>
+                                <div class="empty-room">
+                                    <div class="empty-icon">📭</div>
+                                    <span>No devices assigned</span>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wizard Navigation for Preview Mode -->
+                <div class="wizard-navigation">
+                    <button class="btn-secondary wizard-btn" (click)="previousRoomWizardStep()">
+                        ← Back to Assign Devices
+                    </button>
+                    <div class="wizard-info">
+                        <span class="success-text">✓ Room organization complete!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Actions -->
+            <div class="step-actions enhanced">
+                <button class="btn-secondary" (click)="previousStep()">
+                    ← Back to Discovery
+                </button>
+
+                <button class="btn-primary" (click)="nextStep()" [disabled]="!canProceedToNextStep()">
+                    <span *ngIf="allRooms().length > 0">
+                        🎉 Complete Setup →
+                    </span>
+                    <span *ngIf="allRooms().length === 0">
+                        Setup at least 1 room to continue
+                    </span>
+                </button>
+            </div>
         </div>
         <!-- Complete Step -->
         <div *ngIf="currentStep() === 4" class="complete-step">

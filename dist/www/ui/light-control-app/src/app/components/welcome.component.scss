@@ -707,8 +707,1251 @@
     }
 }
 
-// Rooms Step
+// Enhanced Rooms Step
 .rooms-step {
+    .step-header {
+        text-align: center;
+        margin-bottom: 3rem;
+
+        .room-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+
+            .stat-card {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 1rem;
+                padding: 1.5rem;
+                text-align: center;
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+
+                .stat-number {
+                    display: block;
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: white;
+                }
+
+                .stat-label {
+                    display: block;
+                    font-size: 0.9rem;
+                    opacity: 0.8;
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+    }
+
+    // Organization Modes
+    .organization-modes {
+        margin-bottom: 3rem;
+
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+
+            &.wizard-tabs {
+                .wizard-arrow {
+                    font-size: 1.5rem;
+                    color: rgba(255, 255, 255, 0.5);
+                    font-weight: 700;
+                }
+            }
+
+            .mode-tab {
+                padding: 1rem 2rem;
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid transparent;
+                border-radius: 1rem;
+                color: white;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+                min-width: 150px;
+
+                .step-number {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 0.9rem;
+                }
+
+                .step-label {
+                    font-size: 0.9rem;
+                }
+
+                &:hover:not(:disabled) {
+                    background: rgba(255, 255, 255, 0.15);
+                    transform: translateY(-2px);
+                }
+
+                &.active {
+                    background: white;
+                    color: #667eea;
+                    border-color: rgba(255, 255, 255, 0.3);
+                    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+
+                    .step-number {
+                        background: #667eea;
+                        color: white;
+                    }
+                }
+
+                &.completed {
+                    background: rgba(76, 175, 80, 0.2);
+                    border-color: rgba(76, 175, 80, 0.5);
+
+                    .step-number {
+                        background: #4caf50;
+                        color: white;
+
+                        &::before {
+                            content: '✓';
+                        }
+                    }
+                }
+
+                &:disabled {
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+
+    // Wizard Navigation
+    .wizard-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 3rem;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .wizard-btn {
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+        .wizard-info {
+            flex: 1;
+            text-align: center;
+            font-size: 1rem;
+
+            .warning-text {
+                color: #ffc107;
+                font-weight: 600;
+            }
+
+            .success-text {
+                color: #4caf50;
+                font-weight: 600;
+            }
+        }
+    }
+
+    // Room Setup Mode
+    .room-setup-mode {
+        .room-templates {
+            margin-bottom: 4rem;
+
+            h3 {
+                text-align: center;
+                margin-bottom: 2rem;
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            .template-cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1.5rem;
+
+                .template-card {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 1.5rem;
+                    padding: 2rem;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(15px);
+                    border: 2px solid transparent;
+
+                    &:hover {
+                        transform: translateY(-5px);
+                        background: rgba(255, 255, 255, 0.15);
+                        border-color: rgba(255, 255, 255, 0.3);
+                        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                    }
+
+                    &.selected {
+                        background: rgba(102, 126, 234, 0.3);
+                        border-color: rgba(102, 126, 234, 0.8);
+                        box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+                        position: relative;
+
+                        .selected-indicator {
+                            position: absolute;
+                            top: 1rem;
+                            right: 1rem;
+                            background: #4caf50;
+                            color: white;
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+                        }
+                    }
+
+                    .template-icon {
+                        font-size: 3rem;
+                        text-align: center;
+                        margin-bottom: 1rem;
+                    }
+
+                    .template-info {
+                        text-align: center;
+
+                        h4 {
+                            margin: 0 0 0.5rem 0;
+                            font-size: 1.3rem;
+                            font-weight: 700;
+                        }
+
+                        .template-rooms {
+                            opacity: 0.8;
+                            font-size: 0.9rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        .current-rooms {
+            .rooms-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+
+                h3 {
+                    margin: 0;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                }
+
+                .room-actions {
+                    display: flex;
+                    gap: 1rem;
+
+                    .btn-outline,
+                    .btn-primary {
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 0.75rem;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+
+                        &.small {
+                            padding: 0.5rem 1rem;
+                            font-size: 0.9rem;
+                        }
+                    }
+                }
+            }
+
+            .rooms-grid.enhanced {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+
+                .room-card.interactive {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 1.5rem;
+                    padding: 0;
+                    position: relative;
+                    backdrop-filter: blur(15px);
+                    border: 2px solid transparent;
+                    transition: all 0.3s ease;
+                    overflow: hidden;
+
+                    &:hover {
+                        transform: translateY(-5px);
+                        background: rgba(255, 255, 255, 0.15);
+                        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                    }
+
+                    &.has-devices {
+                        border-color: rgba(76, 175, 80, 0.6);
+                    }
+
+                    .room-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 1.5rem 1.5rem 0 1.5rem;
+                        position: relative;
+
+                        .room-icon.editable {
+                            font-size: 2.5rem;
+                            cursor: pointer;
+                            transition: transform 0.2s ease;
+
+                            &:hover {
+                                transform: scale(1.1);
+                            }
+                        }
+
+                        .room-menu {
+                            background: none;
+                            border: none;
+                            color: white;
+                            font-size: 1.5rem;
+                            cursor: pointer;
+                            padding: 0.5rem;
+                            border-radius: 0.5rem;
+                            transition: background 0.2s ease;
+
+                            &:hover {
+                                background: rgba(255, 255, 255, 0.1);
+                            }
+                        }
+
+                        .room-menu-dropdown {
+                            position: absolute;
+                            top: 100%;
+                            right: 0;
+                            background: rgba(20, 20, 20, 0.95);
+                            border-radius: 0.75rem;
+                            padding: 0.5rem;
+                            z-index: 10;
+                            backdrop-filter: blur(15px);
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            min-width: 120px;
+
+                            button {
+                                display: block;
+                                width: 100%;
+                                text-align: left;
+                                padding: 0.5rem 0.75rem;
+                                background: none;
+                                border: none;
+                                color: white;
+                                cursor: pointer;
+                                border-radius: 0.5rem;
+                                transition: background 0.2s ease;
+
+                                &:hover {
+                                    background: rgba(255, 255, 255, 0.1);
+                                }
+
+                                &:disabled {
+                                    opacity: 0.5;
+                                    cursor: not-allowed;
+                                }
+                            }
+                        }
+                    }
+
+                    .room-content {
+                        padding: 0 1.5rem 1.5rem 1.5rem;
+                        text-align: center;
+
+                        .room-name {
+                            display: block;
+                            font-weight: 700;
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            padding: 0.5rem;
+                            border-radius: 0.5rem;
+                            transition: background 0.2s ease;
+
+                            &[contenteditable="true"] {
+                                background: rgba(255, 255, 255, 0.1);
+                                outline: none;
+                            }
+                        }
+
+                        .room-stats {
+                            .device-count {
+                                background: rgba(255, 255, 255, 0.1);
+                                border-radius: 1rem;
+                                padding: 0.5rem 1rem;
+                                display: inline-block;
+                                margin-bottom: 1rem;
+
+                                .count {
+                                    font-weight: 700;
+                                    font-size: 1.1rem;
+                                }
+
+                                .label {
+                                    font-size: 0.9rem;
+                                    opacity: 0.8;
+                                    margin-left: 0.5rem;
+                                }
+                            }
+                        }
+
+                        .room-badge {
+                            position: absolute;
+                            top: 1rem;
+                            left: 1rem;
+                            font-size: 0.7rem;
+                            padding: 0.3rem 0.7rem;
+                            border-radius: 1rem;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+
+                            &.suggested {
+                                background: linear-gradient(135deg, #4caf50, #45a049);
+                                color: white;
+                            }
+
+                            &.custom {
+                                background: linear-gradient(135deg, #2196f3, #1976d2);
+                                color: white;
+                            }
+                        }
+                    }
+
+                    .room-preview {
+                        padding: 0 1.5rem 1.5rem 1.5rem;
+
+                        .preview-devices {
+                            display: flex;
+                            justify-content: center;
+                            gap: 0.5rem;
+                            align-items: center;
+
+                            .device-preview {
+                                font-size: 1.2rem;
+                                opacity: 0.8;
+                            }
+
+                            .more-devices {
+                                background: rgba(255, 255, 255, 0.2);
+                                border-radius: 1rem;
+                                padding: 0.3rem 0.6rem;
+                                font-size: 0.8rem;
+                                font-weight: 600;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Device Assignment Mode
+    .device-assignment-mode {
+        .assignment-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            min-height: 600px;
+
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+            }
+
+            .unassigned-panel {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 1.5rem;
+                padding: 1.5rem;
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+
+                .panel-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1.5rem;
+
+                    h3 {
+                        margin: 0;
+                        font-size: 1.2rem;
+                        font-weight: 700;
+                    }
+
+                    .device-count {
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 1rem;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                    }
+                }
+
+                .device-filters {
+                    margin-bottom: 1.5rem;
+
+                    .filter-select {
+                        width: 100%;
+                        padding: 0.75rem;
+                        background: rgba(255, 255, 255, 0.1);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        border-radius: 0.75rem;
+                        color: white;
+                        font-size: 0.9rem;
+
+                        option {
+                            background: #333;
+                            color: white;
+                        }
+                    }
+                }
+
+                .unassigned-devices {
+                    max-height: 400px;
+                    overflow-y: auto;
+
+                    .device-item.draggable {
+                        background: rgba(255, 255, 255, 0.1);
+                        border-radius: 0.75rem;
+                        padding: 1rem;
+                        margin-bottom: 0.75rem;
+                        cursor: grab;
+                        transition: all 0.2s ease;
+                        border: 1px solid transparent;
+
+                        &:hover {
+                            background: rgba(255, 255, 255, 0.15);
+                            border-color: rgba(255, 255, 255, 0.3);
+                        }
+
+                        &:active {
+                            cursor: grabbing;
+                        }
+
+                        .device-icon {
+                            font-size: 1.5rem;
+                            margin-bottom: 0.5rem;
+                        }
+
+                        .device-info {
+                            .device-name {
+                                font-weight: 600;
+                                font-size: 0.9rem;
+                                margin-bottom: 0.3rem;
+                            }
+
+                            .device-type {
+                                font-size: 0.8rem;
+                                opacity: 0.7;
+                            }
+                        }
+
+                        .device-actions {
+                            margin-top: 0.75rem;
+
+                            .quick-assign {
+                                width: 100%;
+                                padding: 0.5rem;
+                                background: rgba(255, 255, 255, 0.1);
+                                border: 1px solid rgba(255, 255, 255, 0.2);
+                                border-radius: 0.5rem;
+                                color: white;
+                                font-size: 0.8rem;
+
+                                option {
+                                    background: #333;
+                                    color: white;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .empty-state {
+                    text-align: center;
+                    padding: 3rem 1rem;
+
+                    .empty-icon {
+                        font-size: 3rem;
+                        margin-bottom: 1rem;
+                    }
+
+                    h4 {
+                        margin: 0 0 0.5rem 0;
+                        font-weight: 700;
+                    }
+
+                    p {
+                        margin: 0;
+                        opacity: 0.8;
+                        font-size: 0.9rem;
+                    }
+                }
+            }
+
+            .rooms-assignment-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1.5rem;
+                align-content: start;
+
+                .room-assignment-card {
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 1.5rem;
+                    padding: 1.5rem;
+                    backdrop-filter: blur(15px);
+                    border: 2px solid rgba(255, 255, 255, 0.1);
+                    transition: all 0.3s ease;
+                    min-height: 250px;
+
+                    &.drag-over {
+                        border-color: rgba(76, 175, 80, 0.8);
+                        background: rgba(76, 175, 80, 0.1);
+                        transform: scale(1.02);
+                    }
+
+                    .room-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 1.5rem;
+
+                        .room-icon {
+                            font-size: 2rem;
+                        }
+
+                        .room-info {
+                            flex: 1;
+                            margin-left: 1rem;
+
+                            h4 {
+                                margin: 0 0 0.3rem 0;
+                                font-weight: 700;
+                            }
+
+                            .room-device-count {
+                                font-size: 0.8rem;
+                                opacity: 0.8;
+                            }
+                        }
+
+                        .room-clear {
+                            background: rgba(244, 67, 54, 0.2);
+                            border: none;
+                            color: white;
+                            padding: 0.5rem;
+                            border-radius: 0.5rem;
+                            cursor: pointer;
+                            transition: all 0.2s ease;
+
+                            &:hover:not(:disabled) {
+                                background: rgba(244, 67, 54, 0.4);
+                            }
+
+                            &:disabled {
+                                opacity: 0.3;
+                                cursor: not-allowed;
+                            }
+                        }
+                    }
+
+                    .room-devices {
+                        .assigned-device {
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 0.75rem;
+                            padding: 0.75rem;
+                            margin-bottom: 0.75rem;
+                            display: flex;
+                            align-items: center;
+                            gap: 0.75rem;
+                            cursor: grab;
+                            transition: all 0.2s ease;
+
+                            &:hover {
+                                background: rgba(255, 255, 255, 0.15);
+                            }
+
+                            .device-icon {
+                                font-size: 1.3rem;
+                            }
+
+                            .device-name {
+                                flex: 1;
+                                font-size: 0.9rem;
+                                font-weight: 600;
+                            }
+
+                            .remove-device {
+                                background: rgba(244, 67, 54, 0.2);
+                                border: none;
+                                color: white;
+                                width: 24px;
+                                height: 24px;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 0.9rem;
+                                transition: all 0.2s ease;
+
+                                &:hover {
+                                    background: rgba(244, 67, 54, 0.4);
+                                }
+                            }
+                        }
+
+                        .drop-zone {
+                            border: 2px dashed rgba(255, 255, 255, 0.3);
+                            border-radius: 1rem;
+                            padding: 2rem;
+                            text-align: center;
+                            transition: all 0.3s ease;
+
+                            &.active {
+                                border-color: rgba(76, 175, 80, 0.8);
+                                background: rgba(76, 175, 80, 0.1);
+                            }
+
+                            .drop-message {
+                                .drop-icon {
+                                    font-size: 2rem;
+                                    margin-bottom: 0.5rem;
+                                    opacity: 0.6;
+                                }
+
+                                span {
+                                    font-size: 0.9rem;
+                                    opacity: 0.8;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .smart-suggestions {
+            margin-top: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            h3 {
+                margin: 0 0 1.5rem 0;
+                font-size: 1.3rem;
+                font-weight: 700;
+            }
+
+            .suggestions-list {
+                margin-bottom: 1.5rem;
+
+                .suggestion-item {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 0.75rem;
+                    padding: 1rem;
+                    margin-bottom: 1rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 1rem;
+
+                    .suggestion-info {
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                        flex: 1;
+
+                        .device-name {
+                            font-weight: 600;
+                        }
+
+                        .suggestion-arrow {
+                            font-size: 1.2rem;
+                            opacity: 0.7;
+                        }
+
+                        .room-name {
+                            font-weight: 600;
+                        }
+
+                        .confidence {
+                            background: rgba(76, 175, 80, 0.2);
+                            color: #4caf50;
+                            padding: 0.3rem 0.6rem;
+                            border-radius: 1rem;
+                            font-size: 0.8rem;
+                            font-weight: 600;
+                        }
+                    }
+
+                    .suggestion-actions {
+                        display: flex;
+                        gap: 0.5rem;
+
+                        .btn-small {
+                            padding: 0.5rem 1rem;
+                            border-radius: 0.5rem;
+                            font-size: 0.8rem;
+                            font-weight: 600;
+                            border: none;
+                            cursor: pointer;
+                            transition: all 0.2s ease;
+
+                            &.btn-primary {
+                                background: rgba(76, 175, 80, 0.8);
+                                color: white;
+
+                                &:hover {
+                                    background: rgba(76, 175, 80, 1);
+                                }
+                            }
+
+                            &.btn-outline {
+                                background: transparent;
+                                color: white;
+                                border: 1px solid rgba(255, 255, 255, 0.3);
+
+                                &:hover {
+                                    background: rgba(255, 255, 255, 0.1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Preview Mode
+    .preview-mode {
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+
+            .view-options {
+                display: flex;
+                gap: 0.5rem;
+
+                .view-btn {
+                    padding: 0.75rem 1.5rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 0.75rem;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.15);
+                    }
+
+                    &.active {
+                        background: white;
+                        color: #667eea;
+                        border-color: white;
+                    }
+                }
+            }
+
+            .preview-stats {
+                .completion-rate {
+                    background: rgba(76, 175, 80, 0.2);
+                    color: #4caf50;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 1rem;
+                    font-weight: 700;
+                    font-size: 1.1rem;
+                }
+            }
+        }
+
+        .room-preview-grid {
+            display: grid;
+            gap: 1.5rem;
+
+            &.grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+
+            &.list {
+                grid-template-columns: 1fr;
+            }
+
+            &.compact {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .room-preview-card {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 1.5rem;
+                padding: 1.5rem;
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+
+                .room-preview-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+
+                    .room-icon {
+                        font-size: 2rem;
+                    }
+
+                    .room-info {
+                        h4 {
+                            margin: 0 0 0.3rem 0;
+                            font-weight: 700;
+                            font-size: 1.2rem;
+                        }
+
+                        .device-count {
+                            font-size: 0.9rem;
+                            opacity: 0.8;
+                        }
+                    }
+                }
+
+                .room-preview-content {
+                    .device-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                        gap: 0.75rem;
+
+                        .device-preview-item {
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 0.75rem;
+                            padding: 1rem;
+                            text-align: center;
+                            transition: all 0.2s ease;
+
+                            &:hover {
+                                background: rgba(255, 255, 255, 0.15);
+                            }
+
+                            .device-icon {
+                                font-size: 1.5rem;
+                                margin-bottom: 0.5rem;
+                            }
+
+                            .device-name {
+                                font-size: 0.8rem;
+                                font-weight: 600;
+                                margin-bottom: 0.3rem;
+                                line-height: 1.2;
+                            }
+
+                            .device-status {
+                                font-size: 0.7rem;
+                                padding: 0.2rem 0.5rem;
+                                border-radius: 0.5rem;
+                                font-weight: 600;
+
+                                &.status-on {
+                                    background: rgba(76, 175, 80, 0.3);
+                                    color: #4caf50;
+                                }
+
+                                &.status-off {
+                                    background: rgba(158, 158, 158, 0.3);
+                                    color: #9e9e9e;
+                                }
+
+                                &.status-unknown {
+                                    background: rgba(255, 193, 7, 0.3);
+                                    color: #ffc107;
+                                }
+                            }
+                        }
+                    }
+
+                    .empty-room {
+                        text-align: center;
+                        padding: 2rem;
+
+                        .empty-icon {
+                            font-size: 2rem;
+                            margin-bottom: 0.5rem;
+                            opacity: 0.6;
+                        }
+
+                        span {
+                            font-size: 0.9rem;
+                            opacity: 0.8;
+                        }
+                    }
+                }
+            }
+
+            &.list .room-preview-card {
+                .room-preview-content .device-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                }
+            }
+
+            &.compact .room-preview-card {
+                padding: 1rem;
+
+                .room-preview-header {
+                    margin-bottom: 1rem;
+
+                    .room-icon {
+                        font-size: 1.5rem;
+                    }
+
+                    .room-info h4 {
+                        font-size: 1rem;
+                    }
+                }
+
+                .room-preview-content .device-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+                    gap: 0.5rem;
+
+                    .device-preview-item {
+                        padding: 0.75rem;
+
+                        .device-icon {
+                            font-size: 1.2rem;
+                        }
+
+                        .device-name {
+                            font-size: 0.7rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Enhanced Step Actions
+    .step-actions.enhanced {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 3rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .middle-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary,
+        .btn-primary,
+        .btn-outline {
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    // Dialog Styles
+    .add-room-dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .dialog-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .dialog-content {
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            .dialog-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+
+                h3 {
+                    margin: 0;
+                    font-weight: 700;
+                    color: white;
+                }
+
+                .close-btn {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    padding: 0.5rem;
+                    border-radius: 0.5rem;
+                    transition: background 0.2s ease;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+                }
+            }
+
+            .dialog-body {
+                .form-group {
+                    margin-bottom: 1.5rem;
+
+                    label {
+                        display: block;
+                        margin-bottom: 0.5rem;
+                        font-weight: 600;
+                        color: white;
+
+                        .required {
+                            color: #ff6b6b;
+                            font-weight: 700;
+                            margin-left: 0.25rem;
+                        }
+                    }
+
+                    .form-input,
+                    .form-select {
+                        width: 100%;
+                        padding: 0.75rem;
+                        background: rgba(255, 255, 255, 0.1);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        border-radius: 0.75rem;
+                        color: white;
+                        font-size: 1rem;
+                        transition: all 0.3s ease;
+
+                        &:focus {
+                            outline: none;
+                            background: rgba(255, 255, 255, 0.15);
+                            border-color: rgba(255, 255, 255, 0.5);
+                        }
+
+                        option {
+                            background: #333;
+                            color: white;
+                        }
+                    }
+
+                    .icon-selector {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+                        gap: 0.5rem;
+                        max-height: 150px;
+                        overflow-y: auto;
+
+                        .icon-option {
+                            aspect-ratio: 1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.5rem;
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 0.5rem;
+                            cursor: pointer;
+                            transition: all 0.2s ease;
+
+                            &:hover {
+                                background: rgba(255, 255, 255, 0.2);
+                            }
+
+                            &.selected {
+                                background: rgba(102, 126, 234, 0.8);
+                                transform: scale(1.1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .form-note {
+                background: rgba(102, 126, 234, 0.1);
+                border-left: 3px solid rgba(102, 126, 234, 0.5);
+                padding: 1rem;
+                border-radius: 0.5rem;
+                margin-top: 0.5rem;
+
+                p {
+                    margin: 0;
+                    font-size: 0.9rem;
+                    color: rgba(255, 255, 255, 0.8);
+                }
+            }
+
+            .dialog-actions {
+                display: flex;
+                gap: 1rem;
+                justify-content: flex-end;
+
+                .btn-secondary,
+                .btn-primary {
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 0.75rem;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                }
+            }
+        }
+    }
+
     .room-setup {
         h3 {
             margin: 3rem 0 1.5rem 0;
@@ -717,7 +1960,7 @@
             text-align: center;
         }
 
-        .rooms-grid {
+        .rooms-grid:not(.enhanced) {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.5rem;
@@ -850,12 +2093,12 @@
                     border-radius: 0.75rem;
                     font-weight: 700;
                     cursor: pointer;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    font-size: 1rem;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 
-                    &:hover:not(:disabled) {
-                        transform: translateY(-3px);
-                        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
                     }
 
                     &:disabled {
