@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, catchError, of, map } from 'rxjs';
 import { LightEntity, ServiceCallData, HAServiceResponse } from '../models/light.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,10 @@ export class HomeAssistant {
   }
 
   private loadInitialStates(): void {
+    console.log('🔄 Loading initial states from Home Assistant...');
     this.getAllStates().subscribe({
       next: (states) => {
+        console.log('✅ Successfully loaded states:', states.length, 'entities');
         const lightEntities: { [key: string]: LightEntity } = {};
         states
           .filter(entity => entity.entity_id.startsWith('light.'))
@@ -28,59 +31,47 @@ export class HomeAssistant {
             lightEntities[entity.entity_id] = entity;
           });
 
+        console.log('💡 Found light entities:', Object.keys(lightEntities).length);
         this.entitiesSubject.next(lightEntities);
         this.connectionStatusSubject.next(true);
       },
       error: (error) => {
-        console.error('Failed to load initial states:', error);
+        console.error('❌ Failed to load initial states:', error);
+        console.log('🔌 No Home Assistant connection - working with empty state');
         this.connectionStatusSubject.next(false);
-        this.loadDemoData();
+        this.entitiesSubject.next({});
       }
     });
   }
 
-  private loadDemoData(): void {
-    const demoRooms = [
-      { id: 'bedroom_john', lights: ['bedroom_john_closet', 'bedroom_john_desk', 'bedroom_john_ceiling'] },
-      { id: 'bedroom_guest', lights: ['bedroom_guest_closet', 'bedroom_guest_ceiling'] },
-      { id: 'bedroom_master', lights: ['bedroom_master_closet', 'bedroom_master_ceiling'] },
-      { id: 'bathroom_guest', lights: ['bathroom_guest_toilet', 'bathroom_guest_shower', 'bathroom_guest_ceiling'] },
-      { id: 'bathroom_master', lights: ['bathroom_master_toilet', 'bathroom_master_shower', 'bathroom_master_ceiling', 'bathroom_master_cabinet', 'bathroom_master_mirror'] },
-      { id: 'family_room', lights: ['family_room_wall_tv', 'family_room_couch', 'family_room_ceiling'] },
-      { id: 'living_room', lights: ['living_room_wall', 'living_room_ceiling'] },
-      { id: 'kitchen', lights: ['kitchen_wall', 'kitchen_ceiling', 'kitchen_cabinets', 'kitchen_island'] }
-    ];
-
-    const demoEntities: { [key: string]: LightEntity } = {};
-
-    demoRooms.forEach(room => {
-      room.lights.forEach(lightId => {
-        const entityId = `light.${lightId}`;
-        demoEntities[entityId] = {
-          entity_id: entityId,
-          state: 'off',
-          attributes: {
-            brightness: 51,
-            friendly_name: lightId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-          }
-        };
-      });
-    });
-
-    this.entitiesSubject.next(demoEntities);
-  }
-
   getAllStates(): Observable<LightEntity[]> {
-    return this.http.get<LightEntity[]>('/api/states').pipe(
+    console.log('🌐 Making API request to /api/states...');
+    const headers = {
+      'Authorization': `Bearer ${environment.homeAssistant.token}`,
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.get<LightEntity[]>('/api/states', { headers }).pipe(
       catchError(error => {
-        console.error('API request failed:', error);
+        console.error('❌ API request failed:', error);
+        console.error('🔍 Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url,
+          message: error.message
+        });
         return of([]);
       })
     );
   }
 
   getEntityState(entityId: string): Observable<LightEntity | null> {
-    return this.http.get<LightEntity>(`/api/states/${entityId}`).pipe(
+    const headers = {
+      'Authorization': `Bearer ${environment.homeAssistant.token}`,
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.get<LightEntity>(`/api/states/${entityId}`, { headers }).pipe(
       catchError(error => {
         console.error(`Failed to get state for ${entityId}:`, error);
         return of(null);
@@ -119,47 +110,20 @@ export class HomeAssistant {
 
   private callService(domain: string, service: string, data: ServiceCallData): Observable<HAServiceResponse> {
     const url = `/api/services/${domain}/${service}`;
+    console.log(`🎯 Calling service: ${domain}.${service}`, data);
 
-    return this.http.post(url, data).pipe(
+    const headers = {
+      'Authorization': `Bearer ${environment.homeAssistant.token}`,
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post(url, data, { headers }).pipe(
       map(() => ({ success: true })),
       catchError(error => {
-        console.error(`Service call failed: ${domain}.${service}`, error);
-        // In demo mode, simulate successful calls
-        this.updateLocalState(data, service);
+        console.error(`❌ Service call failed: ${domain}.${service}`, error);
         return of({ success: false, message: error.message });
       })
     );
-  }
-
-  private updateLocalState(data: ServiceCallData, service: string): void {
-    const currentEntities = this.entitiesSubject.value;
-    const entity = currentEntities[data.entity_id];
-
-    if (entity) {
-      const updatedEntity = { ...entity };
-
-      switch (service) {
-        case 'turn_on':
-          updatedEntity.state = 'on';
-          if (data.brightness !== undefined) {
-            updatedEntity.attributes.brightness = data.brightness;
-          }
-          break;
-        case 'turn_off':
-          updatedEntity.state = 'off';
-          break;
-        case 'toggle':
-          updatedEntity.state = entity.state === 'on' ? 'off' : 'on';
-          break;
-      }
-
-      const updatedEntities = {
-        ...currentEntities,
-        [data.entity_id]: updatedEntity
-      };
-
-      this.entitiesSubject.next(updatedEntities);
-    }
   }
 
   refreshEntityState(entityId: string): void {

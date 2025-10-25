@@ -3,6 +3,7 @@
 secrets.yaml
 secrets.ps1
 config.json
+ha-config.json
 known_devices.yaml
 *.log
 *.db

@@ -9,10 +9,10 @@ views:
   - title: "🏠 Angular Light Control"
     path: light-control
     icon: mdi:lightbulb-group
+    panel: true # This makes it full screen
     cards:
       - type: iframe
         url: /local/ui/index.html
-        aspect_ratio: "16:9"
         title: "Angular Light Control Interface"
 
   #############################################################################################################################################

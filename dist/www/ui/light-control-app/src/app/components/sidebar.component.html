@@ -1,0 +1,57 @@
+<nav class="sidebar">
+    <div class="nav-section">
+        <div class="nav-title-container">
+            <h3 class="nav-title">
+                <span class="icon">🏠</span>
+                Rooms
+            </h3>
+            <button class="manage-icon-btn" (click)="openRoomManagementModal()" title="Manage Rooms">
+                <span class="manage-icon">⚙️</span>
+            </button>
+        </div>
+        <div class="nav-items">
+            <button *ngFor="let room of dataService.rooms(); trackBy: trackRoomById" class="nav-item"
+                [class.active]="smartHomeService.selectedRoom() === room.id" (click)="selectRoom(room.id)">
+                <span class="nav-icon">{{ room.icon }}</span>
+                <span class="nav-label">{{ room.name }}</span>
+                <span class="nav-badge">{{ getLightsOnCount(room) }}</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="nav-section">
+        <h3 class="nav-title">
+            <span class="icon">⚙️</span>
+            Systems
+        </h3>
+        <div class="nav-items">
+            <a routerLink="/entity-mapping" class="nav-item" routerLinkActive="active">
+                <span class="nav-icon">🔗</span>
+                <span class="nav-label">Entity Mapping</span>
+            </a>
+            <a routerLink="/themes" class="nav-item" routerLinkActive="active">
+                <span class="nav-icon">🎨</span>
+                <span class="nav-label">Themes</span>
+            </a>
+            <button *ngFor="let system of dataService.systems(); trackBy: trackSystemById" class="nav-item"
+                [class.active]="smartHomeService.selectedSystem() === system.id" (click)="selectSystem(system.id)">
+                <span class="nav-icon">{{ system.icon }}</span>
+                <span class="nav-label">{{ system.name }}</span>
+                <span class="nav-badge">{{ system.sensors?.length || 0 }}</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Room Management Modal -->
+<div class="modal-overlay" *ngIf="showRoomModal" (click)="closeRoomManagementModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Manage Rooms</h2>
+            <button class="close-btn" (click)="closeRoomManagementModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <app-room-management></app-room-management>
+        </div>
+    </div>
+</div>

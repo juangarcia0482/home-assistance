@@ -1,0 +1,134 @@
+<div class="entity-mapping-container">
+    <!-- Header -->
+    <div class="header">
+        <h2>🔗 Entity Mapping</h2>
+        <p>Discover and map your Home Assistant entities to rooms</p>
+
+        <div class="actions">
+            <button (click)="discoverEntities()" [disabled]="mappingService.isLoading()" class="btn-primary">
+                {{ mappingService.isLoading() ? 'Discovering...' : '🔍 Discover Entities' }}
+            </button>
+
+            <button (click)="clearAllMappings()" class="btn-unmap">
+                🧹 Clear All
+            </button>
+
+            <button (click)="exportConfig()" class="btn-secondary">
+                📤 Export Config
+            </button>
+
+            <label class="btn-secondary file-input">
+                📥 Import Config
+                <input type="file" accept=".json" (change)="onFileSelected($event)" hidden>
+            </label>
+        </div>
+    </div>
+
+    <!-- Error Display -->
+    <div *ngIf="mappingService.error()" class="error-message">
+        ❌ {{ mappingService.error() }}
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="filters">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="🔍 Search entities..." class="search-input">
+
+        <div class="filter-buttons">
+            <button (click)="showUnmappedEntities()" [class.active]="showUnmapped" class="filter-btn">
+                📋 Unmapped ({{ mappingService.getUnmappedEntities().length }})
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Rooms List -->
+        <div class="rooms-panel">
+            <h3>🏠 Rooms</h3>
+
+            <!-- Add New Room -->
+            <div class="add-room">
+                <input type="text" [(ngModel)]="newRoomName" placeholder="Room name" class="room-input">
+                <input type="text" [(ngModel)]="newRoomIcon" placeholder="Icon (optional)" class="room-input">
+                <button (click)="addRoom()" [disabled]="!newRoomName.trim()" class="btn-add">
+                    ➕ Add
+                </button>
+            </div>
+
+            <!-- Room List -->
+            <div class="room-list">
+                <div *ngFor="let room of mappingService.availableRooms()" (click)="selectRoom(room.id)"
+                    [class.selected]="selectedRoom === room.id && !showUnmapped" class="room-item">
+                    <span class="room-icon">{{ room.icon }}</span>
+                    <span class="room-name">{{ room.name }}</span>
+                    <span class="entity-count">({{ room.entities.length }})</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Entities List -->
+        <div class="entities-panel">
+            <h3>
+                {{ getEntityPanelTitle() }}
+            </h3>
+
+            <div class="entities-list">
+                <div *ngFor="let entity of filteredEntities" class="entity-item">
+
+                    <div class="entity-info">
+                        <span class="entity-icon">{{ getEntityIcon(entity) }}</span>
+                        <div class="entity-details">
+                            <div class="entity-name">{{ entity.friendly_name }}</div>
+                            <div class="entity-id">{{ entity.entity_id }}</div>
+                        </div>
+                        <div class="entity-state" [style.color]="getStateColor(entity)">
+                            {{ entity.state }}
+                        </div>
+                    </div>
+
+                    <div class="entity-actions">
+                        <!-- If unmapped, show room assignment buttons -->
+                        <div *ngIf="!entity.mapped" class="room-assignment">
+                            <select (change)="onRoomSelect(entity.entity_id, $event)" class="room-select">
+                                <option value="">Select Room...</option>
+                                <option *ngFor="let room of mappingService.availableRooms()" [value]="room.id">
+                                    {{ room.icon }} {{ room.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- If mapped, show unmap button -->
+                        <button *ngIf="entity.mapped && entity.room"
+                            (click)="unmapEntity(entity.entity_id, entity.room)" class="btn-unmap">
+                            ❌ Unmap
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty state -->
+                <div *ngIf="filteredEntities.length === 0" class="empty-state">
+                    {{ mappingService.isLoading() ? '🔄 Loading entities...' : '📭 No entities found' }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats">
+        <div class="stat-item">
+            <span class="stat-number">{{ mappingService.discoveredEntities().length }}</span>
+            <span class="stat-label">Total Entities</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">{{ getMappedEntitiesCount() }}</span>
+            <span class="stat-label">Mapped</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">{{ mappingService.getUnmappedEntities().length }}</span>
+            <span class="stat-label">Unmapped</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">{{ mappingService.availableRooms().length }}</span>
+            <span class="stat-label">Rooms</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+<div *ngIf="smartHomeService.getCurrentRoom() as room" class="room-content">
+    <div class="room-header">
+        <h2 class="room-title">
+            <span class="room-icon">{{ room.icon }}</span>
+            {{ room.name }}
+        </h2>
+        <div class="room-stats">
+            <span class="stat">
+                <span class="icon">LIGHT</span>
+                {{ getLightsOnCount(room) }}/{{ room.lights.length }} lights on
+            </span>
+            <span class="stat">
+                <span class="icon">ENERGY</span>
+                {{ smartHomeService.getRoomEnergyUsage() }}W
+            </span>
+        </div>
+    </div>
+
+    <!-- Lighting Controls -->
+    <div class="controls-section">
+        <h3 class="section-title">
+            <span class="icon">LIGHT</span>
+            Lighting
+        </h3>
+        <div class="device-grid">
+            <div *ngFor="let light of room.lights; trackBy: trackLightById" class="device-card light-card"
+                [class.active]="light.isOn">
+                <div class="device-header">
+                    <span class="device-icon">BULB</span>
+                    <h4 class="device-name">{{ light.name }}</h4>
+                    <button class="device-toggle" [class.on]="light.isOn"
+                        (click)="smartHomeService.toggleLight(light.id)">
+                        <span class="toggle-slider"></span>
+                    </button>
+                </div>
+
+                <div *ngIf="light.isOn" class="device-controls">
+                    <div class="slider-control">
+                        <label>Brightness</label>
+                        <input type="range" min="1" max="100" [value]="light.brightness"
+                            (input)="smartHomeService.setBrightness(light.id, $event)" class="brightness-slider">
+                        <span class="slider-value">{{ light.brightness }}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Climate Controls -->
+    <div *ngIf="room.climate" class="controls-section">
+        <h3 class="section-title">
+            <span class="icon">TEMP</span>
+            Climate
+        </h3>
+        <div class="climate-controls">
+            <div class="climate-card">
+                <div class="climate-display">
+                    <div class="temperature-reading">
+                        <span class="temp-value">{{ room.climate.currentTemp }}°</span>
+                        <span class="temp-unit">C</span>
+                    </div>
+                    <div class="climate-status">
+                        <span class="status-label">Target: {{ room.climate.targetTemp }}°C</span>
+                        <span class="mode-badge">{{ room.climate.mode }}</span>
+                    </div>
+                </div>
+
+                <div class="climate-controls-grid">
+                    <button class="climate-btn" [class.active]="room.climate.mode === 'heat'">
+                        <span class="icon">HEAT</span>
+                        Heat
+                    </button>
+                    <button class="climate-btn" [class.active]="room.climate.mode === 'cool'">
+                        <span class="icon">COOL</span>
+                        Cool
+                    </button>
+                    <button class="climate-btn" [class.active]="room.climate.mode === 'auto'">
+                        <span class="icon">AUTO</span>
+                        Auto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

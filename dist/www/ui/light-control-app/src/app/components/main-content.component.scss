@@ -1,0 +1,7 @@
+// Main content component styles
+.content-area {
+    flex: 1;
+    background: var(--bg-primary);
+    overflow-y: auto;
+    height: calc(100vh - 80px);
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/room-section/room-section.scss"],
+  "sourcesContent": [".room-section {\r\n    margin: 15px 0;\r\n}\r\n\r\n.room-header {\r\n    padding: 15px 20px;\r\n    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);\r\n    color: white;\r\n    font-weight: 500;\r\n    cursor: pointer;\r\n    user-select: none;\r\n    transition: all 0.3s ease;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n\r\n    &:hover {\r\n        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);\r\n    }\r\n}\r\n\r\n.room-name {\r\n    font-size: 16px;\r\n}\r\n\r\n.room-toggle {\r\n    font-size: 18px;\r\n    transition: transform 0.3s ease;\r\n}\r\n\r\n.room-header.expanded .room-toggle {\r\n    transform: rotate(180deg);\r\n}\r\n\r\n.room-content {\r\n    background: white;\r\n    max-height: 0;\r\n    overflow: hidden;\r\n    transition: max-height 0.3s ease;\r\n\r\n    &.expanded {\r\n        max-height: 500px;\r\n    }\r\n}"],
+  "mappings": ";AAAA,CAAA;AACI,UAAA,KAAA;;AAGJ,CAAA;AACI,WAAA,KAAA;AACA;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;AACA,SAAA;AACA,eAAA;AACA,UAAA;AACA,uBAAA;AAAA,eAAA;AACA,cAAA,IAAA,KAAA;AACA,WAAA;AACA,mBAAA;AACA,eAAA;;AAEA,CAZJ,WAYI;AACI;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;;AAIR,CAAA;AACI,aAAA;;AAGJ,CAAA;AACI,aAAA;AACA,cAAA,UAAA,KAAA;;AAGJ,CA1BA,WA0BA,CAAA,SAAA,CALA;AAMI,aAAA,OAAA;;AAGJ,CAAA;AACI,cAAA;AACA,cAAA;AACA,YAAA;AACA,cAAA,WAAA,KAAA;;AAEA,CANJ,YAMI,CAVJ;AAWQ,cAAA;;",
+  "names": []
+}

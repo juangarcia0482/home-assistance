@@ -1,0 +1,288 @@
+<div class="welcome-container">
+    <!-- Progress Indicator -->
+    <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="(currentStep() / (steps.length - 1)) * 100"></div>
+    </div>
+
+    <!-- Step Navigation Wizard -->
+    <div class="step-indicators">
+        <div *ngFor="let step of steps; let i = index; trackBy: trackStep" class="step-indicator"
+            [class.active]="i === currentStep()" [class.completed]="i < currentStep()">
+            <div class="step-circle">
+                <span *ngIf="i < currentStep()">✓</span>
+                <span *ngIf="i >= currentStep()">{{step.icon}}</span>
+            </div>
+            <span class="step-label">{{step.title}}</span>
+        </div>
+    </div>
+
+    <!-- Step Content -->
+    <div class="step-content" [attr.data-step]="currentStepInfo().id">
+
+        <!-- Welcome Step -->
+        <div *ngIf="currentStep() === 0" class="welcome-step">
+            <div class="hero-section">
+                <div class="hero-icon">🏠</div>
+                <h1>{{currentStepInfo().title}}</h1>
+                <p class="hero-subtitle">{{currentStepInfo().subtitle}}</p>
+            </div>
+
+            <!-- Person Selection Section -->
+            <div *ngIf="mobileAppUsers().length > 0" class="person-selection-section">
+                <h3>� Who are you?</h3>
+                <p class="selection-subtitle">Select your profile to personalize your smart home experience</p>
+                <div class="person-selection-grid">
+                    <div *ngFor="let person of mobileAppUsers(); trackBy: trackPerson" class="person-card"
+                        [class.selected]="isPersonSelected(person.entity_id)" (click)="selectPerson(person.entity_id)">
+                        <div class="person-avatar">
+                            <span class="person-icon">👤</span>
+                            <div *ngIf="isPersonSelected(person.entity_id)" class="selection-checkmark">✓</div>
+                        </div>
+                        <div class="person-info">
+                            <div class="person-name">{{getUserDisplayName(person)}}</div>
+                            <div class="person-status" [class.home]="person.state === 'home'">
+                                {{person.state === 'home' ? '🏠 Currently Home' : '🌍 Currently Away'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p *ngIf="!selectedPerson()" class="selection-hint">
+                    💡 Please select who you are to continue with personalized setup
+                </p>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn-primary large" (click)="nextStep()" [disabled]="!canProceedToNextStep()">
+                    <span *ngIf="selectedPerson()">
+                        🚀 Start Setup as {{selectedPersonDisplayName()}}
+                    </span>
+                    <span *ngIf="!selectedPerson()">
+                        Select your profile to continue
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Themes Step (moved to step 1) -->
+        <div *ngIf="currentStep() === 1" class="themes-step">
+            <div class="step-header">
+                <h2>{{currentStepInfo().title}}</h2>
+                <p>{{currentStepInfo().subtitle}}</p>
+            </div>
+
+            <div class="theme-selector">
+                <div *ngFor="let theme of availableThemes; trackBy: trackTheme" class="theme-card"
+                    [class.selected]="selectedTheme() === theme.id" (click)="selectTheme(theme.id)">
+                    <div class="theme-preview" [style.background]="theme.preview"></div>
+                    <div class="theme-info">
+                        <h4>{{theme.name}}</h4>
+                        <div *ngIf="selectedTheme() === theme.id" class="selected-indicator">✓</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn-secondary" (click)="previousStep()">
+                    ← Back
+                </button>
+                <button class="btn-primary" (click)="nextStep()">
+                    Continue to Discovery →
+                </button>
+            </div>
+        </div>
+
+        <!-- Discovery Step (moved to step 2) -->
+        <div *ngIf="currentStep() === 2" class="discovery-step">
+            <div class="step-header">
+                <h2>{{currentStepInfo().title}}</h2>
+                <p>{{currentStepInfo().subtitle}}</p>
+            </div>
+
+            <div *ngIf="!isDiscovering() && discoveredEntities().length === 0" class="discovery-ready">
+                <div class="discovery-icon">🔍</div>
+                <h3>Ready to Discover</h3>
+                <p>We'll scan your Home Assistant setup to find all your smart devices.</p>
+                <button class="btn-primary" (click)="performDiscovery()">
+                    Start Discovery
+                </button>
+            </div>
+
+            <div *ngIf="isDiscovering()" class="discovery-progress">
+                <div class="progress-circle">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring-circle" cx="60" cy="60" r="54"
+                            [style.stroke-dasharray]="2 * Math.PI * 54"
+                            [style.stroke-dashoffset]="2 * Math.PI * 54 * (1 - discoveryProgress() / 100)">
+                        </circle>
+                    </svg>
+                    <div class="progress-text">
+                        <span class="progress-percentage">{{discoveryProgress()}}%</span>
+                    </div>
+                </div>
+                <h3>{{discoveryStatus()}}</h3>
+                <p>Found {{discoveredEntities().length}} devices so far...</p>
+            </div>
+
+            <div *ngIf="!isDiscovering() && discoveredEntities().length > 0" class="discovery-results">
+                <div class="success-icon">🎉</div>
+                <h3>Discovery Complete!</h3>
+                <p>Found {{discoveredEntities().length}} smart devices in your home</p>
+                <p class="selection-status">
+                    <strong>{{getSelectedDeviceCount()}}</strong> devices selected for setup
+                </p>
+
+                <div class="device-categories">
+                    <div *ngFor="let category of deviceCategories(); trackBy: trackCategory" class="category-card"
+                        [class.expanded]="isCategoryExpanded(category.type)">
+                        <div class="category-header" (click)="toggleCategoryExpansion(category.type)">
+                            <div class="category-icon">{{category.icon}}</div>
+                            <div class="category-info">
+                                <h4>{{category.name}}</h4>
+                                <span class="device-count">{{category.count}} devices</span>
+                            </div>
+                            <div class="category-actions">
+                                <span class="expand-icon" [class.expanded]="isCategoryExpanded(category.type)">▼</span>
+                            </div>
+                        </div>
+
+                        <div *ngIf="isCategoryExpanded(category.type)" class="category-content">
+                            <div class="category-controls">
+                                <button class="btn-small btn-primary" (click)="selectAllInCategory(category)">
+                                    Select All
+                                </button>
+                                <button class="btn-small btn-secondary" (click)="deselectAllInCategory(category)">
+                                    Deselect All
+                                </button>
+                            </div>
+
+                            <div class="device-list">
+                                <div *ngFor="let device of category.devices; trackBy: trackDevice" class="device-item"
+                                    [class.selected]="isDeviceSelected(device.entity_id)">
+                                    <label class="device-checkbox">
+                                        <input type="checkbox" [checked]="isDeviceSelected(device.entity_id)"
+                                            (change)="toggleDeviceSelection(device.entity_id)">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="device-info">
+                                        <div class="device-name">{{device.attributes?.friendly_name ||
+                                            device.entity_id}}</div>
+                                        <div class="device-id">{{device.entity_id}}</div>
+                                        <div *ngIf="device.state" class="device-state">State: {{device.state}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-secondary" (click)="previousStep()">
+                        ← Back
+                    </button>
+                    <button class="btn-primary" (click)="nextStep()" [disabled]="!canProceedToNextStep()">
+                        <span *ngIf="getSelectedDeviceCount() > 0">
+                            Continue with {{getSelectedDeviceCount()}} devices →
+                        </span>
+                        <span *ngIf="getSelectedDeviceCount() === 0">
+                            Select devices to continue
+                        </span>
+                    </button>
+
+                    <p *ngIf="getSelectedDeviceCount() === 0" class="selection-hint">
+                        💡 Please select at least one device to continue with the setup
+                    </p>
+                </div>
+            </div> <!-- Rooms Step (moved to step 3) -->
+            <div *ngIf="currentStep() === 3" class="rooms-step">
+                <div class="step-header">
+                    <h2>{{currentStepInfo().title}}</h2>
+                    <p>{{currentStepInfo().subtitle}}</p>
+                </div>
+
+                <div class="room-setup">
+                    <h3>Suggested Rooms</h3>
+                    <div class="rooms-grid">
+                        <div *ngFor="let room of defaultRooms; trackBy: trackRoom" class="room-card suggested">
+                            <div class="room-icon">{{room.icon}}</div>
+                            <span class="room-name">{{room.name}}</span>
+                            <div class="room-badge">Suggested</div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="customRooms().length > 0">
+                        <h3>Your Custom Rooms</h3>
+                        <div class="rooms-grid">
+                            <div *ngFor="let room of customRooms(); trackBy: trackRoom" class="room-card custom">
+                                <div class="room-icon">{{room.icon}}</div>
+                                <span class="room-name">{{room.name}}</span>
+                                <button class="remove-btn" (click)="removeRoom(room)">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="add-room">
+                        <h3>Add Custom Room</h3>
+                        <div class="add-room-form">
+                            <input type="text" [(ngModel)]="newRoomName" placeholder="Enter room name..."
+                                (keydown.enter)="addCustomRoom()" class="room-input">
+                            <button class="btn-add" (click)="addCustomRoom()" [disabled]="!newRoomName().trim()">
+                                Add Room
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-secondary" (click)="previousStep()">
+                        ← Back
+                    </button>
+                    <button class="btn-primary" (click)="nextStep()">
+                        Continue to Completion →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Complete Step -->
+            <div *ngIf="currentStep() === 4" class="complete-step">
+                <div class="success-animation">
+                    <div class="success-icon large">🎉</div>
+                    <h1>{{currentStepInfo().title}}</h1>
+                    <p>{{currentStepInfo().subtitle}}</p>
+                </div>
+
+                <div class="setup-summary">
+                    <div class="summary-card">
+                        <div class="summary-icon">📱</div>
+                        <div class="summary-content">
+                            <h4>Devices Discovered</h4>
+                            <span>{{discoveredEntities().length}} smart devices</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">🏠</div>
+                        <div class="summary-content">
+                            <h4>Rooms Configured</h4>
+                            <span>{{allRooms().length}} rooms ready</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">🎨</div>
+                        <div class="summary-content">
+                            <h4>Theme Selected</h4>
+                            <span>{{getSelectedThemeName()}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-secondary" (click)="previousStep()">
+                        ← Back
+                    </button>
+                    <button class="btn-primary large celebration" (click)="finishSetup()">
+                        🚀 Enter Your Smart Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

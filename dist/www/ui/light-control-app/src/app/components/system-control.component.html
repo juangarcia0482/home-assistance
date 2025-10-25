@@ -1,0 +1,53 @@
+<div *ngIf="smartHomeService.getCurrentSystem() as system" class="system-content">
+    <div class="system-header">
+        <h2 class="system-title">
+            <span class="system-icon">{{ system.icon }}</span>
+            {{ system.name }}
+        </h2>
+        <div class="system-status">
+            <span class="status-indicator" [class.online]="system.status === 'online'"></span>
+            <span class="status-text">{{ system.status }}</span>
+        </div>
+    </div>
+
+    <div class="system-description">
+        <p>{{ system.description }}</p>
+    </div>
+
+    <!-- Security System -->
+    <div *ngIf="system.id === 'security'" class="security-panel">
+        <h3 class="section-title">Security Sensors</h3>
+        <div class="security-sensors">
+            <div *ngFor="let sensor of system.sensors; trackBy: trackSensorById" class="sensor-card"
+                [class.triggered]="sensor.status === 'triggered'">
+                <span class="sensor-icon">{{ sensor.icon }}</span>
+                <div class="sensor-info">
+                    <h4>{{ sensor.name }}</h4>
+                    <span class="sensor-location">{{ sensor.location }}</span>
+                </div>
+                <div class="sensor-status" [class.triggered]="sensor.status === 'triggered'">
+                    {{ sensor.status }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Systems -->
+    <div *ngIf="system.id !== 'security'" class="system-controls">
+        <h3 class="section-title">System Controls</h3>
+        <div class="control-grid">
+            <button class="system-control-btn primary">
+                <span class="icon">START</span>
+                <span>Activate</span>
+            </button>
+            <button class="system-control-btn">
+                <span class="icon">SET</span>
+                <span>Settings</span>
+            </button>
+            <button class="system-control-btn">
+                <span class="icon">DATA</span>
+                <span>Analytics</span>
+            </button>
+        </div>
+    </div>
+</div>

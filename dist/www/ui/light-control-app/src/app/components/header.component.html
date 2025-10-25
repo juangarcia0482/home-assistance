@@ -1,0 +1,27 @@
+<header class="header">
+    <div class="header-content">
+        <div class="header-left">
+            <h1>
+                <span class="logo">HOME</span>
+                Smart Home Control
+            </h1>
+            <div class="location-info">
+                <span class="icon">LOC</span>
+                <span>Home</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="stats-grid">
+                <div class="stat-item time-display">
+                    <span class="stat-label">Current Time</span>
+                    <span class="stat-value">{{ smartHomeService.currentTime() }}</span>
+                </div>
+            </div>
+
+            <div class="global-controls">
+                <!-- Global controls removed per user request -->
+            </div>
+        </div>
+    </div>
+</header>

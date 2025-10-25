@@ -1,0 +1,6 @@
+<div class="main-content">
+    <app-room-control *ngIf="smartHomeService.getCurrentRoom()"></app-room-control>
+    <app-system-control
+        *ngIf="smartHomeService.getCurrentSystem() && !smartHomeService.getCurrentRoom()"></app-system-control>
+    <app-welcome *ngIf="!smartHomeService.getCurrentRoom() && !smartHomeService.getCurrentSystem()"></app-welcome>
+</div>

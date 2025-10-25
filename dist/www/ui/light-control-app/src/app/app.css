@@ -1,0 +1,42 @@
+:root {
+    /* Default theme variables (Ocean Blue) */
+    --theme-primary: #3b82f6;
+    --theme-secondary: #1e40af;
+    --theme-background: #0f172a;
+    --theme-surface: rgba(59, 130, 246, 0.1);
+    --theme-text: #ffffff;
+    --theme-textSecondary: #94a3b8;
+    --theme-accent: #06b6d4;
+    --theme-border: rgba(59, 130, 246, 0.2);
+    --theme-success: #10b981;
+    --theme-warning: #f59e0b;
+    --theme-error: #ef4444;
+    --theme-gradient-background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    --theme-gradient-header: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+    --theme-gradient-card: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(30, 64, 175, 0.1));
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--theme-gradient-background);
+    color: var(--theme-text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s ease;
+}
+
+.app-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+app-sidebar {
+    flex-shrink: 0;
+}
+
+router-outlet {
+    flex: 1;
+    overflow: auto;
+}
