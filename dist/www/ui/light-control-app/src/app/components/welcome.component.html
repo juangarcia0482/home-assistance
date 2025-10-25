@@ -176,6 +176,14 @@
                     </div>
                 </div>
 
+                <!-- Retry Discovery Section -->
+                <div class="retry-discovery-section">
+                    <button class="btn-outline" (click)="retryDiscovery()" [disabled]="isDiscovering()">
+                        🔄 Retry Discovery
+                    </button>
+                    <p class="retry-hint">Not seeing all your devices? Try running discovery again.</p>
+                </div>
+
                 <div class="step-actions">
                     <button class="btn-secondary" (click)="previousStep()">
                         ← Back

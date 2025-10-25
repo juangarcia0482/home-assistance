@@ -1,4 +1,4 @@
-﻿import { Component, signal, computed, OnInit } from '@angular/core';
+﻿import { Component, signal, computed, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -36,6 +36,7 @@ export class WelcomeComponent implements OnInit {
     isDiscovering = signal(false);
     discoveryStatus = signal('');
     discoveryProgress = signal(0);
+    discoveryCompleted = signal(false);
     setupComplete = signal(false);
     selectedTheme = signal('modern-dark');
     newRoomName = signal('');
@@ -84,13 +85,38 @@ export class WelcomeComponent implements OnInit {
         private discoveryService: HomeAssistantDiscoveryService,
         private themeService: ThemeService,
         private router: Router
-    ) { }
+    ) {
+        // Add effect to track step changes
+        effect(() => {
+            const currentStep = this.currentStep();
+            console.log('🔄 Step changed to:', currentStep);
+            console.log('📋 Step info:', this.steps[currentStep]);
+            console.log('🎯 Is step 3 (rooms)?', currentStep === 3);
+
+            if (currentStep === 3) {
+                console.log('🏠 ROOMS STEP IS ACTIVE!');
+                console.log('🔍 defaultRooms length:', this.defaultRooms.length);
+                console.log('🔍 customRooms length:', this.customRooms().length);
+                console.log('🔍 allRooms length:', this.allRooms().length);
+            }
+        });
+    }
 
     ngOnInit() {
         // Initialize with current theme
         this.selectedTheme.set(this.themeService.currentTheme().id);
         // Load mobile app users on initialization
         this.loadMobileAppUsers();
+
+        // Debug logging
+        console.log('🚀 WelcomeComponent initialized');
+        console.log('📊 Initial currentStep:', this.currentStep());
+        console.log('📝 Steps array:', this.steps);
+
+        // Watch for step changes
+        setInterval(() => {
+            console.log('⏰ Current step check:', this.currentStep());
+        }, 2000);
     }
 
     async loadMobileAppUsers(): Promise<void> {
@@ -197,15 +223,18 @@ export class WelcomeComponent implements OnInit {
 
     async nextStep(): Promise<void> {
         const current = this.currentStep();
+        console.log('🔄 nextStep() called from step:', current);
 
         // Validation: Check if person is selected on welcome step
         if (current === 0 && this.mobileAppUsers().length > 0 && !this.selectedPerson()) {
+            console.log('❌ Validation failed: No person selected');
             alert('Please select who you are before continuing.');
             return;
         }
 
         // Validation: Check if devices are selected on discovery step (now step 2)
         if (current === 2 && this.discoveredEntities().length > 0 && this.selectedDevices().size === 0) {
+            console.log('❌ Validation failed: No devices selected');
             alert('Please select at least one device before continuing to the next step.');
             return;
         }
@@ -218,14 +247,15 @@ export class WelcomeComponent implements OnInit {
                     this.themeService.setTheme(themeObj);
                 }
             }
-        } else if (current === 2) { // Discovery step (now step 2)
-            await this.performDiscovery();
-            // After discovery, automatically select devices if none are selected
-            if (this.selectedDevices().size === 0) {
-                return; // Don't proceed if no devices are discovered
-            }
-        } if (current < this.steps.length - 1) {
+        }
+
+        // Move to next step (this should happen for all steps)
+        if (current < this.steps.length - 1) {
+            console.log('✅ Moving to next step:', current + 1);
             this.currentStep.set(current + 1);
+            console.log('📍 New currentStep value:', this.currentStep());
+        } else {
+            console.log('🚫 Already at last step, cannot proceed');
         }
 
         if (current === this.steps.length - 2) { // Last step before complete
@@ -235,8 +265,13 @@ export class WelcomeComponent implements OnInit {
 
     previousStep(): void {
         const current = this.currentStep();
+        console.log('⬅️ previousStep() called from step:', current);
         if (current > 0) {
+            console.log('✅ Moving to previous step:', current - 1);
             this.currentStep.set(current - 1);
+            console.log('📍 New currentStep value:', this.currentStep());
+        } else {
+            console.log('🚫 Already at first step, cannot go back');
         }
     }
 
@@ -265,13 +300,30 @@ export class WelcomeComponent implements OnInit {
             // Perform actual discovery
             await this.discoveryService.generateEntityMapping();
 
+            // Mark discovery as completed
+            this.discoveryCompleted.set(true);
+            console.log('✅ Discovery completed and marked as complete');
+
         } catch (error) {
             console.error('Discovery failed:', error);
             this.discoveryStatus.set('Discovery completed with some issues');
+            // Still mark as completed even if there were issues
+            this.discoveryCompleted.set(true);
         } finally {
             this.isDiscovering.set(false);
             await this.delay(1000);
         }
+    }
+
+    async retryDiscovery(): Promise<void> {
+        console.log('🔄 Retrying discovery...');
+        // Reset discovery state
+        this.discoveryCompleted.set(false);
+        this.selectedDevices.set(new Set());
+
+        // Perform discovery again
+        await this.performDiscovery();
+        this.discoveryCompleted.set(true);
     }
 
     addCustomRoom(): void {
