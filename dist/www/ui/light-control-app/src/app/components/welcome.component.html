@@ -205,11 +205,6 @@
         </div>
         <div *ngIf="currentStep() === 3" class="rooms-step">
             <div class="info-banner">
-                <div class="info-icon">💡</div>
-                <p>
-                    You can customize room assignments for your devices later in the app settings.
-                    This step helps organize your smart home for a better experience.
-                </p>
                 <div class="step-header">
                     <h2>{{currentStepInfo().title}}</h2>
                     <p>{{currentStepInfo().subtitle}}</p>
@@ -257,46 +252,47 @@
                     </button>
                 </div>
             </div>
-            <!-- Complete Step -->
-            <div *ngIf="currentStep() === 4" class="complete-step">
-                <div class="success-animation">
-                    <div class="success-icon large">🎉</div>
-                    <h1>{{currentStepInfo().title}}</h1>
-                    <p>{{currentStepInfo().subtitle}}</p>
-                </div>
 
-                <div class="setup-summary">
-                    <div class="summary-card">
-                        <div class="summary-icon">📱</div>
-                        <div class="summary-content">
-                            <h4>Devices Discovered</h4>
-                            <span>{{discoveredEntities().length}} smart devices</span>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon">🏠</div>
-                        <div class="summary-content">
-                            <h4>Rooms Configured</h4>
-                            <span>{{allRooms().length}} rooms ready</span>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon">🎨</div>
-                        <div class="summary-content">
-                            <h4>Theme Selected</h4>
-                            <span>{{getSelectedThemeName()}}</span>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <!-- Complete Step -->
+        <div *ngIf="currentStep() === 4" class="complete-step">
+            <div class="success-animation">
+                <div class="success-icon large">🎉</div>
+                <h1>{{currentStepInfo().title}}</h1>
+                <p>{{currentStepInfo().subtitle}}</p>
+            </div>
 
-                <div class="step-actions">
-                    <button class="btn-secondary" (click)="previousStep()">
-                        ← Back
-                    </button>
-                    <button class="btn-primary large celebration" (click)="finishSetup()">
-                        🚀 Enter Your Smart Home
-                    </button>
+            <div class="setup-summary">
+                <div class="summary-card">
+                    <div class="summary-icon">📱</div>
+                    <div class="summary-content">
+                        <h4>Devices Discovered</h4>
+                        <span>{{discoveredEntities().length}} smart devices</span>
+                    </div>
                 </div>
+                <div class="summary-card">
+                    <div class="summary-icon">🏠</div>
+                    <div class="summary-content">
+                        <h4>Rooms Configured</h4>
+                        <span>{{allRooms().length}} rooms ready</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">🎨</div>
+                    <div class="summary-content">
+                        <h4>Theme Selected</h4>
+                        <span>{{getSelectedThemeName()}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn-secondary" (click)="previousStep()">
+                    ← Back
+                </button>
+                <button class="btn-primary large celebration" (click)="finishSetup()">
+                    🚀 Enter Your Smart Home
+                </button>
             </div>
         </div>
     </div>
